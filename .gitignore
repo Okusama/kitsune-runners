@@ -1,0 +1,9 @@
+
+\.idea/
+
+public/kitsune/build/
+public/kitsune/node_modules/
+public/kitsune/yarn.lock
+server/node_modules/
+server/server/config/
+server/yarn.lock
