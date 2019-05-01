@@ -31,13 +31,3 @@ export const PrivateRoute = ({component, ...rest}) => {
         }}/>
     );
 };
-
-function supK (number){
-
-    number > 1000 ? number.toString().slice(0, -2) + "K" : number;
-        return
-    } else {
-        return
-    }
-
-}
