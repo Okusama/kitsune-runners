@@ -16,6 +16,7 @@ const AdminNav = (props) => {
             <li className={path.includes("/admin/tournament") ? "active-button-header" : "button-header"}><Link to="/admin/tournament">Admin Tournament</Link></li>
             <li className={path.includes("/admin/championship") ? "active-button-header" : "button-header"}><Link to="/admin/championship">Admin Championship</Link></li>
             <li className={path.includes("/admin/user") ? "active-button-header" : "button-header"}><Link to="/admin/user">Admin User</Link></li>
+            <li className={path === "/admin/race" ? "active-button-header" : "button-header"}><Link to="/admin/race">Admin Race</Link></li>
             <li className={path === "/wheel" ? "active-button-header" : "button-header"}><Link to="/wheel">Wheel</Link></li>
         </ul>
     );
@@ -41,6 +42,7 @@ const PublicNav = (props) => {
                     <li className={path.includes("/public/user") ? "active-button-header" : "button-header"}><Link to="/public/user">Profile</Link></li>
                     <li className={path.includes("/public/tournament") ? "active-button-header" : "button-header"}><Link to="/public/tournament/list">Tournament</Link></li>
                     <li className={path.includes("/public/championship") ? "active-button-header" : "button-header"}><Link to="/public/championship/list">Championship</Link></li>
+                    <li className={path.includes("/public/race") ? "active-button-header" : "button-header"}><Link to="/public/race/list">Race</Link></li>
                 </React.Fragment>
             ) : (
                 <React.Fragment>

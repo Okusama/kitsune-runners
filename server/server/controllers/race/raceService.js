@@ -11,7 +11,7 @@ const create = (req, res) => {
     } else {
         userPermissions.getAdminPermission(req.body.token).then(decoded => {
             if(decoded){
-                if (!req.body.name || !req.body.start_at || !req.body.state){
+                if (!req.body.name || !req.body.start_at){
                     res.status(400).json({
                         "res": "Bad request Missing Info"
                     })
@@ -19,7 +19,7 @@ const create = (req, res) => {
                     let race = {
                         name: req.body.name,
                         start_at: req.body.start_at,
-                        state: req.body.state
+                        state: "open"
                     };
                     let createRace = new Race(race);
                     createRace.save((err, race) => {
@@ -167,6 +167,6 @@ const unregister = (req, res) => {
     }
 };
 
-const getByState = (req, res) => {
-
-}
+exports.create = create;
+exports.register = register;
+exports.unregister = unregister;
