@@ -89,7 +89,19 @@ export const clearRound = data => {
 
 export const createRace = data => {
     return fetch(url + "/race/create", postDataOption(data));
-}
+};
+
+export const getRaceByState = data => {
+    return fetch(url + "/race/getByState", postDataOption(data))
+};
+
+export const registerRace = data => {
+    return fetch(url + "/race/register", postDataOption(data))
+};
+
+export const unregisterRace = data => {
+    return fetch(url + "/race/unregister", postDataOption(data))
+};
 
 /*ChampionShip*/
 export const getChampionshipByState = data => {

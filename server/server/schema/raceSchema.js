@@ -17,6 +17,10 @@ let raceSchema = mongoose.Schema({
         type: Array,
         default: []
     },
+    result: {
+        type: Array,
+        default: []
+    }
 });
 
 raceSchema.methods = {

@@ -1,7 +1,7 @@
 const Race = require("../../schema/raceSchema");
 const jwt = require("jwt-simple");
 const jwtConfig = require("../../config/jwt-config");
-const userPermissions = require("../../utils/userUtils");
+const userUtils = require("../../utils/userUtils");
 
 const create = (req, res) => {
     if(!req.body.token){
@@ -9,7 +9,7 @@ const create = (req, res) => {
             "res": "You must be connected"
         })
     } else {
-        userPermissions.getAdminPermission(req.body.token).then(decoded => {
+        userUtils.getAdminPermission(req.body.token).then(decoded => {
             if(decoded){
                 if (!req.body.name || !req.body.start_at){
                     res.status(400).json({
@@ -49,7 +49,7 @@ const register = (req, res) => {
             "res": "You must be connected"
         })
     } else {
-        userPermissions.getApiPermission(req.body.token).then(decoded => {
+        userUtils.getApiPermission(req.body.token).then(decoded => {
             if(decoded){
                 if (!req.body.race_id){
                     res.status(400).json({
@@ -141,7 +141,7 @@ const unregister = (req, res) => {
                         } else {
                             race.updateOne({$pull: { players: { id: user._id} }}).then( result => {
                                 if (result.nModified === 1){
-                                    Tournament.findOne({
+                                    Race.findOne({
                                         _id: req.body.race_id
                                     }, (err, race) => {
                                         res.status(200).json({
@@ -167,6 +167,40 @@ const unregister = (req, res) => {
     }
 };
 
+const getRaceByState = (req, res) => {
+    if(!req.body.token){
+        res.status(401).json({
+            "res": "You must be connected"
+        })
+    } else {
+        userUtils.getApiPermission(req.body.token).then( decoded => {
+            if(decoded){
+                let stateFilter = req.body.state;
+                Race.find({state: stateFilter}, (err, races) => {
+                    if (err) {
+                        res.status(500).json({
+                            "res": "Internal Server Error"
+                        })
+                    } else if (!races) {
+                        res.status(404).json({
+                            "res": "Tournament not Found"
+                        })
+                    } else {
+                        res.status(200).json({
+                            "res": races
+                        })
+                    }
+                });
+            } else {
+                res.status(401).json({
+                    "res": "You use a bad account"
+                })
+            }
+        });
+    }
+};
+
 exports.create = create;
 exports.register = register;
 exports.unregister = unregister;
+exports.getByState = getRaceByState;
