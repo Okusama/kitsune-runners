@@ -11,9 +11,6 @@ export default class TournamentList extends Component {
             token: localStorage.getItem("token"),
             tournamentList: []
         };
-    }
-
-    componentWillMount() {
         this.getTournament(this.state.tournamentState);
     }
 

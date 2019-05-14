@@ -1,6 +1,7 @@
 
 \.idea/
 
+node_modules
 public/kitsune/build/
 public/kitsune/node_modules/
 public/kitsune/yarn.lock
