@@ -1,6 +1,6 @@
 import React, {Component} from "react"
 import {getRaceByState} from "../../utils/Api";
-import TournamentThumb from "../../components/layout/TournamentThumb";
+import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class RaceList extends Component {
 
@@ -38,12 +38,13 @@ export default class RaceList extends Component {
     render() {
 
         let raceList = this.state.raceList.map((race, index) =>
-            <TournamentThumb
+            <ItemThumb
                 key={index}
                 name={race.name}
                 startAt={race.start_at}
                 nbPlayers={race.players.length}
-                tournament={race}
+                item={race}
+                itemType={"race"}
             />
         );
 

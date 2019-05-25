@@ -83,9 +83,14 @@ const register = (req, res) => {
                             }
                             race.updateOne({$push: { players: player}}).then( result => {
                                 if (result.nModified === 1){
-                                    res.status(200).json({
-                                        "res": "You are registered for the Championship"
-                                    })
+                                    Race.findOne({
+                                        id: req.body.race_id
+                                    }, (error, race) => {
+                                        res.status(200).json({
+                                            "res": "You are registered for the Race",
+                                            "race": race
+                                        })
+                                    });
                                 } else {
                                     res.status(500).json({
                                         "res": "An Error occurred during register"

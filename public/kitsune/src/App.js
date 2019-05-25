@@ -28,6 +28,7 @@ import TournamentMatches from "./pages/public/TournamentMatches";
 import ProfileUserPage from "./pages/public/ProfileUserPage";
 import WheelComponent from "./components/layout/WheelComponent";
 import RaceList from "./pages/public/RaceList";
+import RaceDetail from "./pages/public/RaceDetail";
 import AdminRacePage from "./pages/admin/AdminRacePage";
 
 class App extends Component {
@@ -80,6 +81,7 @@ class App extends Component {
                         <Route exact path="/public/championship/list" component={ChampionshipList}/>
                         <Route exact path="/public/championship/detail" component={ChampionshipDetail}/>
                         <Route exact path="/public/race/list" component={RaceList}/>
+                        <Route exact path="/public/race/detail" component={RaceDetail}/>
                         {/*Admin Routes*/}
                         <PrivateRoute exact path="/admin/tournament" component={AdminTournamentPage} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/championship" component={AdminChampionshipPage} isAdmin={isAdmin}/>

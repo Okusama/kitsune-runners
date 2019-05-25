@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {getTournamentByState} from "../../utils/Api";
-import TournamentThumb from "../../components/layout/TournamentThumb";
+import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class TournamentList extends Component {
 
@@ -40,7 +40,6 @@ export default class TournamentList extends Component {
 
     handleDetailClick = event => {
 
-        console.log(event.target.getAttribute("data-value"))
         this.setState({
             data: [],
             tournamentState: event.target.getAttribute("data-value")
@@ -53,12 +52,13 @@ export default class TournamentList extends Component {
     render(){
 
         let tournamentList = this.state.tournamentList.map((tournament, index) =>
-            <TournamentThumb
+            <ItemThumb
                 key={index}
                 name={tournament.name}
                 startAt={tournament.start_at}
                 nbPlayers={tournament.players.length}
-                tournament={tournament}
+                item={tournament}
+                itemType={"tournament"}
             />
         );
 
