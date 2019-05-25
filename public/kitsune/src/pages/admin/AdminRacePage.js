@@ -104,7 +104,7 @@ export default class AdminRacePage extends Component {
                 <h3>{data.name}</h3>
                 <p>{data.start_at}</p>
                 <p>{data.players.length}</p>
-                <Link to={{pathname : "/admin/tournament/management", state: {data: data}}}>Management</Link>
+                <Link to={{pathname : "/admin/run/management", state: {item: data, item_type: "race"}}}>Management</Link>
                 <form>
                     {combo}
                     { state !== "finished" ? <button type="button" data-id={data._id} onClick={this.handleSubmitChangeTournamentState}>Send</button> : false}

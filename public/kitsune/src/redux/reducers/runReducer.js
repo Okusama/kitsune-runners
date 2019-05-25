@@ -4,13 +4,14 @@ import {cloneObject} from "../../utils/redux";
 const initalState = {
     matchList: [],
     matchSelected: [],
+    racePlayers: []
 }
 
 export default function runReducer(state = initalState, action){
 
     switch(action.type){
 
-        case RUN.GET_MATCHES : {
+        case RUN.TOURNAMENT.GET_MATCHES : {
 
             let matchList = [];
 
@@ -21,7 +22,7 @@ export default function runReducer(state = initalState, action){
 
             return cloneObject( state, {matchList});
 
-        } case RUN.TOGGLE_SELECTED_MATCH : {
+        } case RUN.TOURNAMENT.TOGGLE_SELECTED_MATCH : {
 
             let matchList = state.matchList.map( match => {
                if (match.match_id === action.match_id){
@@ -32,19 +33,19 @@ export default function runReducer(state = initalState, action){
 
             return cloneObject(state, {matchList});
 
-        } case RUN.GET_MATCHES_SELECTED : {
+        } case RUN.TOURNAMENT.GET_MATCHES_SELECTED : {
 
             let matchSelected = state.matchList.filter(match => match.isSelected === true);
 
             return cloneObject(state, {matchSelected});
 
-        } case RUN.SET_MATCHES_SELECTED : {
+        } case RUN.TOURNAMENT.SET_MATCHES_SELECTED : {
 
             let matchSelected = action.matches;
 
             return cloneObject(state, {matchSelected});
 
-        } case RUN.STOP_PLAYER_TIME : {
+        } case RUN.TOURNAMENT.STOP_PLAYER_TIME : {
 
             let time = action.time;
 
@@ -62,13 +63,35 @@ export default function runReducer(state = initalState, action){
 
             return cloneObject(state, {matchSelected});
 
-        } case RUN.CLEAR_MATCHES_SELECTED : {
+        } case RUN.TOURNAMENT.CLEAR_MATCHES_SELECTED : {
 
             let matchSelected = [];
 
             return cloneObject(state, {matchSelected});
 
-        } default: {
+        } case RUN.RACE.SET_PLAYER : {
+
+            let racePlayers = action.players;
+
+            return cloneObject(state, {racePlayers});
+
+        } case RUN.RACE.STOP_PLAYER_TIME : {
+
+            let time = action.time;
+
+            let racePlayers = state.racePlayers.map(player => {
+
+                if (player.id === action.playerId) {
+                    player.time = time;
+                }
+
+                return player;
+
+            });
+
+            return cloneObject(state, {racePlayers});
+
+        } default : {
 
             return state;
 

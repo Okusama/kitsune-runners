@@ -103,6 +103,10 @@ export const unregisterRace = data => {
     return fetch(url + "/race/unregister", postDataOption(data))
 };
 
+export const setRaceResult = data => {
+    return fetch(url + "/race/setRaceResult", postDataOption(data))
+};
+
 /*ChampionShip*/
 export const getChampionshipByState = data => {
     return fetch(url + "/championship/getByState", postDataOption(data));

@@ -205,7 +205,52 @@ const getRaceByState = (req, res) => {
     }
 };
 
+const setRaceResult = (req, res) => {
+    if (!req.body.token) {
+        res.status(401).json({
+            "res": "You must be connected"
+        });
+    } else {
+        userUtils.getAdminPermission(req.body.token).then(decoded => {
+            if (decoded){
+                if (!req.body.race_id || !req.body.result){
+                    res.status(400).json({
+                        "res": "Bad Request Missing info"
+                    })
+                } else {
+                    Race.findOne({
+                        _id: req.body.race_id
+                    }, (err, race) => {
+                        if (err) {
+                            res.status(500).json({
+                                "res": "Internal Server Error"
+                            })
+                        } else if (!race) {
+                            res.status(404).json({
+                                "res": "Race not Found"
+                            })
+                        } else {
+                            race.updateOne({$set: {result: req.body.result}}).then( result => {
+                                if (result.nModified === 1){
+                                    res.status(200).json({
+                                        "res": "Race validate"
+                                    });
+                                } else {
+                                    res.status(500).json({
+                                        "res": "An Error occurred during validate Race"
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        })
+    }
+}
+
 exports.create = create;
 exports.register = register;
 exports.unregister = unregister;
 exports.getByState = getRaceByState;
+exports.setRaceResult = setRaceResult;

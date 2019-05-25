@@ -6,5 +6,6 @@ router.post("/create", raceService.create);
 router.post("/register", raceService.register);
 router.post("/unregister", raceService.unregister);
 router.post("/getByState", raceService.getByState);
+router.post("/setRaceResult", raceService.setRaceResult);
 
 module.exports = router;

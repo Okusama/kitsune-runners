@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import socketIOClient from "socket.io-client";
 
 import {getRound, playerStopPlayerTimer} from "../../utils/Api";
-import {runActionSetMatchSelected, runActionStopPlayerTime} from "../../redux/actions";
+import {runActionSetMatchSelected, runActionTournamentStopPlayerTime} from "../../redux/actions";
 
 import Match from "../../components/layout/Match";
 import Timer from "../../components/layout/Timer";
@@ -27,12 +27,12 @@ class TournamentMatches extends Component {
         const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
 
         socket.on("adminStopPlayerTimer", (time, playerId) => {
-            this.props.runActionStopPlayerTime(time, playerId);
+            this.props.runActionTournamentStopPlayerTime(time, playerId);
         });
 
         socket.on("playerStopPlayerTimer", (time, playerId) => {
             if(playerId !== this.props.user.id) {
-                this.props.runActionStopPlayerTime(time, playerId);
+                this.props.runActionTournamentStopPlayerTime(time, playerId);
             }
         });
 
@@ -64,7 +64,7 @@ class TournamentMatches extends Component {
         let time = this.props.timer;
         let playerId = this.props.user.id;
 
-        this.props.runActionStopPlayerTime(time, playerId);
+        this.props.runActionTournamentStopPlayerTime(time, playerId);
         playerStopPlayerTimer(time, playerId);
 
     }
@@ -103,7 +103,7 @@ const NewTournamentMatchesWithRedux = connect(state => ({
         timer: state.timer.timer
     }),{
         runActionSetMatchSelected,
-        runActionStopPlayerTime
+        runActionTournamentStopPlayerTime
     }
 )(TournamentMatches);
 

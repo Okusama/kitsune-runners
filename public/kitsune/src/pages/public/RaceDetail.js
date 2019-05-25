@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import moment from "moment";
 import {registerRace, unregisterRace} from "../../utils/Api";
+import {Link} from "react-router-dom";
 
 class RaceDetail extends Component{
 
@@ -85,6 +86,7 @@ class RaceDetail extends Component{
                             <a className="button-form" href="#" onClick={this.onUnregister}>Unregister</a>
                         ]
                     }
+                    <Link className="button-form" to={{pathname: "/public/race/match", state: {race: race}}}>Matches</Link>
                 </section>
             </div>
         )

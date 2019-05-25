@@ -95,7 +95,7 @@ class AdminTournamentManagement extends Component {
                 <h4>Tournament Management</h4>
                 <p>{this.state.tournament.name}</p>
                 <button type="button" onClick={this.onStartTournament}>Start Tournament</button>
-                <Link to={{pathname : "/admin/run/management", state: {tournament: this.state.tournament}}}>Manage Race</Link>
+                <Link to={{pathname : "/admin/run/management", state: {item: this.state.tournament, item_type: "tournament"}}}>Manage Race</Link>
                 {bracket}
                 {matches}
             </div>
