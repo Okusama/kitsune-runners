@@ -34,7 +34,7 @@ export default class AdminTournamentPage extends Component {
             name: this.state.name,
             start_at: this.state.start_at,
             token: this.state.token
-        }
+        };
 
         createTournament(sendData).then(json => {
             return json.json();

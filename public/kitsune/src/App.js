@@ -27,6 +27,10 @@ import AdminRunManagement from "./pages/admin/AdminRunManagement";
 import TournamentMatches from "./pages/public/TournamentMatches";
 import ProfileUserPage from "./pages/public/ProfileUserPage";
 import WheelComponent from "./components/layout/WheelComponent";
+import RaceList from "./pages/public/RaceList";
+import RaceDetail from "./pages/public/RaceDetail";
+import AdminRacePage from "./pages/admin/AdminRacePage";
+import RaceMatch from "./pages/public/RaceMatch";
 
 class App extends Component {
 
@@ -77,12 +81,16 @@ class App extends Component {
                         <Route exact path="/public/tournament/matches" component={TournamentMatches}/>
                         <Route exact path="/public/championship/list" component={ChampionshipList}/>
                         <Route exact path="/public/championship/detail" component={ChampionshipDetail}/>
+                        <Route exact path="/public/race/list" component={RaceList}/>
+                        <Route exact path="/public/race/detail" component={RaceDetail}/>
+                        <Route exact path="/public/race/match" component={RaceMatch}/>
                         {/*Admin Routes*/}
                         <PrivateRoute exact path="/admin/tournament" component={AdminTournamentPage} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/championship" component={AdminChampionshipPage} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/user" component={AdminUserPage} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/tournament/management" component={AdminTournamentManagement} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/run/management" component={AdminRunManagement} isAdmin={isAdmin}/>
+                        <PrivateRoute exact path="/admin/race" component={AdminRacePage} isAdmin={isAdmin}/>
                         <PrivateRoute path="/wheel" component={WheelComponent} isAdmin={isAdmin}/>
                     </Switch>
                 </main>

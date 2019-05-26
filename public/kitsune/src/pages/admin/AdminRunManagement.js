@@ -4,11 +4,19 @@ import socketIOClient from "socket.io-client";
 
 import {
     runActionClearMatchSelected,
-    runActionGetMatchSelected,
+    runActionGetMatchSelected, runActionRaceStopPlayerTime,
     runActionSetMatchSelected,
-    runActionStopPlayerTime
+    runActionSetRacePlayers,
+    runActionTournamentStopPlayerTime
 } from "../../redux/actions";
-import {getRound, initRound, adminStopPlayerTimer, validateScoreRound, clearRound} from "../../utils/Api";
+import {
+    getRound,
+    initRound,
+    adminStopPlayerTimer,
+    validateScoreRound,
+    clearRound,
+    setRaceResult
+} from "../../utils/Api";
 
 import AdminMatchManagement from "../../components/admin/AdminMatchManagement";
 import Timer from "../../components/layout/Timer";
@@ -21,7 +29,8 @@ class AdminRunManagement extends Component {
         super(props);
 
         this.state = {
-            tournament: this.props.location.state.tournament,
+            item: this.props.location.state.item,
+            item_type:  this.props.location.state.item_type,
             token: localStorage.getItem("token")
         };
 
@@ -29,28 +38,70 @@ class AdminRunManagement extends Component {
 
     componentDidMount() {
 
-        let sendData = {
-            token: this.state.token,
-            tournament_id: this.state.tournament._id
-        };
+        //const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
+        const socket = socketIOClient("http://localhost:8000");
 
-        getRound(sendData).then(json => {
-            return json.json();
-        }).then(data => {
-            if (data.round === null){
-                this.props.runActionGetMatchSelected();
-            } else {
-                this.props.runActionSetMatchSelected(data.round);
+        switch (this.state.item_type) {
+
+            case "tournament" : {
+
+                let sendData = {
+                    token: this.state.token,
+                    tournament_id: this.state.item._id
+                };
+
+                getRound(sendData).then(json => {
+                    return json.json();
+                }).then(data => {
+                    if (data.round === null){
+                        this.props.runActionGetMatchSelected();
+                    } else {
+                        this.props.runActionSetMatchSelected(data.round);
+                    }
+                });
+
+                socket.on("playerStopPlayerTimer", (time, playerId) => {
+                    this.props.runActionTournamentStopPlayerTime(time, playerId);
+                });
+
+                break;
+
+            } case "race" : {
+
+                let racePlayers = this.state.item.players.map(player => {
+                    console.log(player);
+                    return {
+                        id: player.id,
+                        pseudo: player.pseudo,
+                        time: "0:00:00"
+                    };
+                });
+
+                this.props.runActionSetRacePlayers(racePlayers);
+
+                socket.on("playerStopPlayerTimer", (time, playerId) => {
+                    this.props.runActionRaceStopPlayerTime(time, playerId);
+                });
+
+                break;
+
+            } default : {
+                break;
             }
-        });
 
-        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-
-        socket.on("playerStopPlayerTimer", (time, playerId) => {
-            this.props.runActionStopPlayerTime(time, playerId);
-        });
+        }
 
     }
+
+    onStopPlayerTime = (playerId) => {
+
+        let time = this.props.timer;
+        this.props.runActionTournamentStopPlayerTime(time,playerId);
+        adminStopPlayerTimer(time, playerId);
+
+    };
+
+    /***************** Tournament **********************/
 
     onLockMatches = () => {
 
@@ -86,7 +137,7 @@ class AdminRunManagement extends Component {
 
             let sendData = {
                 token: this.state.token,
-                tournament_id: this.state.tournament._id,
+                tournament_id: this.state.item._id,
                 match_id: match.match_id,
                 winner_id: winnerId,
                 score: score
@@ -104,7 +155,7 @@ class AdminRunManagement extends Component {
 
         let sendData = {
             token: this.state.token,
-            tournament_id: this.state.tournament._id
+            tournament_id: this.state.item._id
         };
 
         clearRound(sendData).then(json => {
@@ -115,15 +166,7 @@ class AdminRunManagement extends Component {
 
     }
 
-    onStopPlayerTime = (playerId) => {
-
-        let time = this.props.timer;
-        this.props.runActionStopPlayerTime(time,playerId);
-        adminStopPlayerTimer(time, playerId);
-
-    };
-
-    render(){
+    renderForTournament = () => {
 
         let matches = this.props.matchSelected.map( match =>
             <AdminMatchManagement
@@ -143,16 +186,92 @@ class AdminRunManagement extends Component {
         );
 
         return(
-            <div className="runManagement">
-                <h2>Run Management</h2>
+            <React.Fragment>
                 <button type="button" onClick={this.onLockMatches}>Lock Matches</button>
                 <button type="button" onClick={this.onValidateScoreRound}>Validate Round</button>
-                <div className="timerManagement">
-                    <Timer isControl={true}/>
-                </div>
                 <section className="matchList">
                     {matches}
                 </section>
+            </React.Fragment>
+        );
+
+    }
+
+    /***************** Race **********************/
+
+    onValidateRace = () => {
+
+        let racePlayersSortByTime = this.props.racePlayers.sort((a,b) => {
+            return new Date("1970/01/01 " + a.time) - new Date("1970/01/01 " + b.time);
+        });
+
+        this.props.runActionSetRacePlayers(racePlayersSortByTime);
+
+        let sendData = {
+            token: this.state.token,
+            race_id: this.state.item._id,
+            result: racePlayersSortByTime
+        };
+
+        setRaceResult(sendData).then(json => {
+            return json.json();
+        }).then(res => {
+            console.log(res);
+        })
+
+    }
+
+    renderForRace = () => {
+
+        return(
+            <React.Fragment>
+                <button onClick={this.onValidateRace}>Validate Race</button>
+                <ul>
+                    {
+                        this.props.racePlayers.map( player => {
+                            return(
+                              <li key={player.id}>
+                                  <p>{player.pseudo}</p>
+                                  <p>{player.time}</p>
+                              </li>
+                            );
+                        })
+                    }
+                </ul>
+            </React.Fragment>
+        );
+
+    }
+
+    render(){
+
+        let renderItem = null;
+
+        switch (this.state.item_type) {
+
+            case "tournament" : {
+
+                renderItem = this.renderForTournament();
+                break;
+
+            } case "race" : {
+
+                renderItem = this.renderForRace();
+                break;
+
+            } default : {
+                break;
+            }
+
+        }
+
+        return(
+            <div className="runManagement">
+                <h2>Run Management</h2>
+                <div className="timerManagement">
+                    <Timer isControl={true}/>
+                </div>
+                {renderItem}
                 <AdminStreamManagement/>
             </div>
         );
@@ -162,12 +281,15 @@ class AdminRunManagement extends Component {
 
 const NewAdminRunManagementWithRedux = connect( state => ({
         matchSelected: state.run.matchSelected,
-        timer: state.timer.timer
+        timer: state.timer.timer,
+        racePlayers: state.run.racePlayers
     }),{
         runActionGetMatchSelected,
         runActionSetMatchSelected,
-        runActionStopPlayerTime,
-        runActionClearMatchSelected
+        runActionTournamentStopPlayerTime,
+        runActionClearMatchSelected,
+        runActionSetRacePlayers,
+        runActionRaceStopPlayerTime
     }
 )(AdminRunManagement);
 

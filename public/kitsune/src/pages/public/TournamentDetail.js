@@ -10,7 +10,7 @@ class TournamentDetail extends Component {
         super(props);
         //TODO: Change localStorage => Cookie
         this.state = {
-            tournament: this.props.location.state.tournament,
+            tournament: this.props.location.state.item,
             token: localStorage.getItem("token"),
         }
     }

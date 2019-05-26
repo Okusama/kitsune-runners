@@ -50,6 +50,9 @@ app.use("/tournament", tournament);
 let championShip = require(__dirname + "/server/controllers/championship/championshipController");
 app.use("/championship", championShip);
 
+let race = require(__dirname + "/server/controllers/race/raceController");
+app.use("/race", race);
+
 //Port d"écoute
 let port = process.env.PORT || 8000;
 server.listen(port, () => console.log("Listening on port" + port));

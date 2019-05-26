@@ -51,7 +51,6 @@ const register = (req, res) => {
         })
     } else {
         userPermissions.getApiPermission(req.body.token).then(decoded => {
-            console.log(decoded);
            if(decoded){
                if (!req.body.championship_id){
                    res.status(400).json({

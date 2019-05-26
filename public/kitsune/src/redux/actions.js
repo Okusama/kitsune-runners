@@ -15,27 +15,35 @@ export function runActionUserAdmin(id, avatar){
 
 /*Matches Action*/
 export function runActionGetMatches(matches){
-    return {type: RUN.GET_MATCHES, matches};
+    return {type: RUN.TOURNAMENT.GET_MATCHES, matches};
 }
 
 export function runActionToggleSelectedMatch(match_id, isSelected){
-    return {type: RUN.TOGGLE_SELECTED_MATCH, match_id, isSelected};
+    return {type: RUN.TOURNAMENT.TOGGLE_SELECTED_MATCH, match_id, isSelected};
 }
 
 export function runActionGetMatchSelected(){
-    return {type: RUN.GET_MATCHES_SELECTED};
+    return {type: RUN.TOURNAMENT.GET_MATCHES_SELECTED};
 }
 
 export function runActionSetMatchSelected(matches){
-    return {type: RUN.SET_MATCHES_SELECTED, matches};
+    return {type: RUN.TOURNAMENT.SET_MATCHES_SELECTED, matches};
 }
 
-export function runActionStopPlayerTime(time, playerId) {
-    return {type: RUN.STOP_PLAYER_TIME, time, playerId}
+export function runActionTournamentStopPlayerTime(time, playerId) {
+    return {type: RUN.TOURNAMENT.STOP_PLAYER_TIME, time, playerId}
 }
 
 export function runActionClearMatchSelected(){
-    return {type: RUN.CLEAR_MATCHES_SELECTED};
+    return {type: RUN.TOURNAMENT.CLEAR_MATCHES_SELECTED};
+}
+
+export function runActionSetRacePlayers(players){
+    return {type: RUN.RACE.SET_PLAYER, players}
+}
+
+export function runActionRaceStopPlayerTime(time, playerId) {
+    return {type: RUN.RACE.STOP_PLAYER_TIME, time, playerId}
 }
 
 /*Timer Action*/
