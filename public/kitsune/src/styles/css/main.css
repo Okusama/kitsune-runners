@@ -32,12 +32,16 @@
   box-shadow: inset 3px 0px 10px 10px rgba(133, 37, 37, 0.75);
 }
 
+.hidden {
+  display: none;
+}
+
 /************************************/
 /*             General              */
 /************************************/
 * {
   box-sizing: border-box;
-  color: white;
+  color: black;
 }
 
 html {

@@ -31,6 +31,7 @@ import RaceList from "./pages/public/RaceList";
 import RaceDetail from "./pages/public/RaceDetail";
 import AdminRacePage from "./pages/admin/AdminRacePage";
 import RaceMatch from "./pages/public/RaceMatch";
+import AdminChampionshipManagement from "./pages/admin/AdminChampionshipManagement";
 
 class App extends Component {
 
@@ -90,6 +91,7 @@ class App extends Component {
                         <PrivateRoute exact path="/admin/user" component={AdminUserPage} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/tournament/management" component={AdminTournamentManagement} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/run/management" component={AdminRunManagement} isAdmin={isAdmin}/>
+                        <PrivateRoute exact path="/admin/championship/management" component={AdminChampionshipManagement} isAdmin={isAdmin}/>
                         <PrivateRoute exact path="/admin/race" component={AdminRacePage} isAdmin={isAdmin}/>
                         <PrivateRoute path="/wheel" component={WheelComponent} isAdmin={isAdmin}/>
                     </Switch>

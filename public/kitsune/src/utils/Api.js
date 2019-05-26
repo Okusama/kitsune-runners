@@ -124,6 +124,10 @@ export const registerChampionship = data => {
   return fetch(url + "/championship/register", postDataOption(data))
 };
 
+export const updateGameParam = data => {
+    return fetch(url + "/championship/updateGameParam", postDataOption(data));
+};
+
 /*Timer*/
 export const startAdminTimer = () => {
     socket.emit("adminStartTimer");

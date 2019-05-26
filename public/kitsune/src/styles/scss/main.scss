@@ -46,6 +46,11 @@ $secondary: rgba(122, 0, 0, 1);
 
 }
 
+.hidden {
+
+  display: none;
+
+}
 
 /************************************/
 /*             General              */
@@ -53,7 +58,7 @@ $secondary: rgba(122, 0, 0, 1);
 
 * {
   box-sizing: border-box;
-  color: white;
+  color: black;
 }
 
 html {

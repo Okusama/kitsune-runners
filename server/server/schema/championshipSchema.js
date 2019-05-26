@@ -18,15 +18,16 @@ let championshipSchema = mongoose.Schema({
         default: []
     },
     games: {
-        type: [String],
+        type: Array,
         required: true
     },
     results: {
-        type: {
-            player: String,
-            game: String,
-            score: Number
-        }
+        type: Array,
+        default: []
+    },
+    params: {
+        type: Array,
+        default: []
     }
 });
 
