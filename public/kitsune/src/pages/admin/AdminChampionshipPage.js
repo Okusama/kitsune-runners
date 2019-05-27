@@ -38,8 +38,7 @@ export default class AdminChampionshipPage extends Component {
             params[game] = {
                 min: "0:00:00",
                 max: "0:00:00",
-                level_nb: 0,
-                level_param: []
+                difficulty_coef: 1
             }
         }
 

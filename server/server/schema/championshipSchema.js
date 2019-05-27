@@ -25,6 +25,10 @@ let championshipSchema = mongoose.Schema({
         type: Array,
         default: []
     },
+    temp_run: {
+        type: Array,
+        default: []
+    },
     params: {
         type: Array,
         default: []

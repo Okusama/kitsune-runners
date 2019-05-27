@@ -30,6 +30,7 @@ const getUserInfo = (token) => {
       .then(decoded => {
           return {
               id: decoded._id,
+              pseudo: decoded.pseudo,
               avatar: decoded.avatar
           }
       })

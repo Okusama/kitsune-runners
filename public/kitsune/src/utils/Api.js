@@ -128,6 +128,10 @@ export const updateGameParam = data => {
     return fetch(url + "/championship/updateGameParam", postDataOption(data));
 };
 
+export const submitRun = data => {
+    return fetch(url + "/championship/submitRun", postDataOption(data));
+};
+
 /*Timer*/
 export const startAdminTimer = () => {
     socket.emit("adminStartTimer");

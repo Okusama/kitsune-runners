@@ -32,6 +32,7 @@ import RaceDetail from "./pages/public/RaceDetail";
 import AdminRacePage from "./pages/admin/AdminRacePage";
 import RaceMatch from "./pages/public/RaceMatch";
 import AdminChampionshipManagement from "./pages/admin/AdminChampionshipManagement";
+import ChampionshipValidateTime from "./pages/public/ChampionshipValidateTime";
 
 class App extends Component {
 
@@ -82,6 +83,7 @@ class App extends Component {
                         <Route exact path="/public/tournament/matches" component={TournamentMatches}/>
                         <Route exact path="/public/championship/list" component={ChampionshipList}/>
                         <Route exact path="/public/championship/detail" component={ChampionshipDetail}/>
+                        <Route exact path="/public/championship/validateTime" component={ChampionshipValidateTime}/>
                         <Route exact path="/public/race/list" component={RaceList}/>
                         <Route exact path="/public/race/detail" component={RaceDetail}/>
                         <Route exact path="/public/race/match" component={RaceMatch}/>

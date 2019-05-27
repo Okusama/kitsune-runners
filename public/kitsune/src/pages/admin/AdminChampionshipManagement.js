@@ -13,7 +13,7 @@ export default class AdminChampionshipManagement extends Component {
             game: null,
             min: null,
             max: null,
-            level_nb: null
+            difficulty_coef: null
         }
     }
 
@@ -38,15 +38,15 @@ export default class AdminChampionshipManagement extends Component {
         if(this.state.game.length === 0) return;
         if(this.state.min.length === 0) return;
         if(this.state.max.length === 0) return;
-        if(this.state.level_nb.length === 0) return;
+        if(this.state.difficulty_coef.length === 0) return;
 
         let sendData = {
             token: this.state.token,
             championship_id: this.state.championship._id,
             game: this.state.game,
-            min: this.state.max,
+            min: this.state.min,
             max: this.state.max,
-            level_nb: this.state.level_nb
+            difficulty_coef: this.state.difficulty_coef
         };
 
         updateGameParam(sendData).then(json => {
@@ -65,7 +65,7 @@ export default class AdminChampionshipManagement extends Component {
             game: gameName,
             min: param.min,
             max: param.max,
-            level_nb: param.level_nb,
+            difficulty_coef: param.difficulty_coef,
         });
 
     }
@@ -81,7 +81,11 @@ export default class AdminChampionshipManagement extends Component {
                     <label htmlFor="max">Max : </label>
                     <input type="text" name="max" id="max" onChange={this.handleChange} value={this.state.max}/>
                     <label htmlFor="level_nb">Level Number : </label>
-                    <input type="number" name="level_nb" id="level_nb" onChange={this.handleChange} value={this.state.level_nb}/>
+                    <select name="difficulty_coef" id="difficulty_coef" onChange={this.handleChange} value={this.state.difficulty_coef}>
+                        <option value={1}>Easy</option>
+                        <option value={2}>Medium</option>
+                        <option value={3}>Hard</option>
+                    </select>
                     <button type="button" onClick={this.onSubmitGameParam}>Submit</button>
                 </form>
             </div>
@@ -89,61 +93,6 @@ export default class AdminChampionshipManagement extends Component {
     }
 
     render(){
-
-        //Calcul Nb Palier
-        // diff = jeu.max - jeu.min
-
-        let params = [
-            {
-                "jeu1": {
-                    "min": "0:10:00",
-                    "max": "0:20:00",
-                    "level_nb": 3,
-                    "level_param": {
-                        "1" : {
-                            "min": {
-                                "time": "0:10:00",
-                                "point": "200"
-                            },
-                            "max": {
-                                "time": "0:13:20",
-                                "point": "133"
-                            }
-                        },
-                        "2" : {
-                            "min": {
-                                "time": "0:13:21",
-                                "point": "132"
-                            },
-                            "max": {
-                                "time": "0:16:40",
-                                "point": "67"
-                            }
-                        },
-                        "3" : {
-                            "min": {
-                                "time": "0:16:41",
-                                "point": "66"
-                            },
-                            "max": {
-                                "time": "0:20:00",
-                                "point": "0"
-                            }
-                        }
-                    }
-                },
-                "jeu2": {
-                    "min": "0:00:00",
-                    "max": "0:00:00",
-                    "level_nb": 0
-                },
-                "jeu3": {
-                    "min": "0:00:00",
-                    "max": "0:00:00",
-                    "level_nb": 0
-                }
-            }
-        ];
 
         let modal = null;
 

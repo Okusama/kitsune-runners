@@ -245,7 +245,7 @@ const updateGameParam = (req, res) => {
     } else {
         userPermissions.getAdminPermission(req.body.token).then(decoded => {
             if (decoded){
-                if (!req.body.championship_id || !req.body.game || !req.body.min || !req.body.max || !req.body.level_nb){
+                if (!req.body.championship_id || !req.body.game || !req.body.min || !req.body.max || !req.body.difficulty_coef){
                     res.status(401).json({
                         "res": "Missing Info"
                     })
@@ -261,7 +261,7 @@ const updateGameParam = (req, res) => {
                             let param = {
                                 min: req.body.min,
                                 max: req.body.max,
-                                level_nb: req.body.level_nb
+                                difficulty_coef: req.body.difficulty_coef
                             };
                             let newParams = championship.params;
                             newParams[0][game] =  param;
@@ -289,8 +289,64 @@ const updateGameParam = (req, res) => {
     }
 }
 
+const submitRun = (req, res) => {
+    if (!req.body.token){
+        res.status(401).json({
+            "res": "You must be connected"
+        })
+    } else {
+        userPermissions.getAdminPermission(req.body.token).then(decoded => {
+            if (decoded){
+                if (!req.body.championship_id || !req.body.game || !req.body.score || !req.body.time || !req.body.video_link){
+                    res.status(401).json({
+                        "res": "Missing Info"
+                    })
+                } else {
+                    let id = req.body.championship_id;
+                    Championship.findOne({_id: id}, (err, championship) => {
+                        if(err){
+                            res.status(500).json({
+                                "res": "Submit score Failed"
+                            })
+                        } else {
+                            userPermissions.getUserInfo(req.body.token).then(user => {
+
+                                let submitTime = {
+                                    user_id: user.id,
+                                    user_pseudo: user.pseudo,
+                                    game: req.body.game,
+                                    score: req.body.score,
+                                    time: req.body.time,
+                                    video_link: req.body.video_link
+                                };
+
+                                championship.updateOne({$push : {temp_run: submitTime}}).then(result => {
+                                    if (result.nModified === 1){
+                                        res.status(200).json({
+                                            "res": "Run submit",
+                                        })
+                                    } else {
+                                        res.status(500).json({
+                                            "res": "An Error occurred during submit your run"
+                                        })
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }
+            } else {
+                res.status(401).json({
+                    "res": "You are not authorized"
+                })
+            }
+        });
+    }
+}
+
 exports.create = createChampionship;
 exports.register = register;
 exports.getChampionshipByState = getChampionShipByState;
 exports.changeChampionshipState = changeChampionshipState;
 exports.updateGameParam = updateGameParam;
+exports.submitRun = submitRun;

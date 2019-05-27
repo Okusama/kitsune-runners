@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {List} from "../../components/layout/List";
 import {registerChampionship} from "../../utils/Api";
+import {Link} from "react-router-dom";
 
 export default class ChampionshipDetail extends Component {
 
@@ -58,6 +59,7 @@ export default class ChampionshipDetail extends Component {
     render(){
         return(
             <div className="championshipDetail">
+                <Link to={{pathname: "/public/championship/validateTime", state:{championship: this.state.championship}}}>Validation Time</Link>
                 {this.createChampionshipDetail(this.state.championship)}
             </div>
         );
