@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {updateGameParam} from "../../utils/Api";
+import {Link} from "react-router-dom";
 
 export default class AdminChampionshipManagement extends Component {
 
@@ -103,7 +104,7 @@ export default class AdminChampionshipManagement extends Component {
         return(
             <div>
                 <h3>ChampionShip Management</h3>
-                <button>Validate Time</button>
+                <Link to={{pathname: "/admin/championship/validateRun", state: {championship: this.state.championship}}}>Validate Run</Link>
                 <table>
                     <tbody>
                         {

@@ -2,6 +2,7 @@ const Championship = require("../../schema/championshipSchema");
 const jwt = require("jwt-simple");
 const jwtConfig = require("../../config/jwt-config");
 const userPermissions = require("../../utils/userUtils");
+const mongoose = require("mongoose");
 
 const createChampionship = (req, res) => {
     if(!req.body.token){
@@ -52,57 +53,68 @@ const register = (req, res) => {
         })
     } else {
         userPermissions.getApiPermission(req.body.token).then(decoded => {
-           if(decoded){
-               if (!req.body.championship_id){
-                   res.status(400).json({
-                       "res": "Bad Request Miss Championship Id"
-                   })
-               } else {
-                   let user = jwt.decode(req.body.token, jwtConfig.secret);
-                   Championship.findOne({
-                       _id: req.body.championship_id
-                   }, (err, championship) => {
-                       if (err) {
-                           res.status(500).json({
-                               "res": "Internal Server Error"
-                           })
-                       } else if (!championship) {
-                           res.status(404).json({
-                               "res": "Championship not Found"
-                           })
-                       } else if (championship.state === "close" || championship.state === "finished"){
-                           res.status(423).json({
-                               "res": "This Championship is closed or finished"
-                           })
-                       } else if (championship.isRegister(user._id, championship) !== undefined){
-                           res.status(400).json({
-                               "res": "You are already register for this championship"
-                           })
-                       } else {
-                           let player = {
-                               id: user._id,
-                               pseudo: user.pseudo
-                           }
-                           championship.updateOne({$push: { players: player}}).then( result => {
-                               if (result.nModified === 1){
-                                   res.status(200).json({
-                                       "res": "You are registered for the Championship"
-                                   })
-                               } else {
-                                   res.status(500).json({
-                                       "res": "An Error occurred during register"
-                                   })
-                               }
-                           });
+            if(decoded){
+                if (!req.body.championship_id){
+                    res.status(400).json({
+                        "res": "Bad Request Miss Championship Id"
+                    })
+                } else {
+                    let user = jwt.decode(req.body.token, jwtConfig.secret);
+                    Championship.findOne({
+                        _id: req.body.championship_id
+                    }, (err, championship) => {
+                        if (err) {
+                            res.status(500).json({
+                                "res": "Internal Server Error"
+                            })
+                        } else if (!championship) {
+                            res.status(404).json({
+                                "res": "Championship not Found"
+                            })
+                        } else if (championship.state === "close" || championship.state === "finished"){
+                            res.status(423).json({
+                                "res": "This Championship is closed or finished"
+                            })
+                        } else if (championship.isRegister(user._id, championship) !== undefined){
+                            res.status(400).json({
+                                "res": "You are already register for this championship"
+                            })
+                        } else {
+                            let player = {
+                                id: user._id,
+                                pseudo: user.pseudo
+                            };
+                            let games = {};
 
-                       }
-                   });
-               }
-           } else {
-               res.status(401).json({
-                   "res": "You use a bad account"
-               })
-           }
+                            for (let game of championship.games){
+                                games[user._id] = {};
+                                games[user._id][game] = {};
+                                games[user._id][game] = {
+                                    "time": "None",
+                                    "score": 0
+                                }
+                            }
+
+                            championship.updateOne({$push: { players: player, results: games}}).then( result => {
+                                if (result.nModified === 1){
+                                    res.status(200).json({
+                                        "res": "You are registered for the Championship"
+                                    })
+                                } else {
+                                    res.status(500).json({
+                                        "res": "An Error occurred during register"
+                                    })
+                                }
+                            });
+
+                        }
+                    });
+                }
+            } else {
+                res.status(401).json({
+                    "res": "You use a bad account"
+                })
+            }
         });
     }
 };
@@ -312,6 +324,7 @@ const submitRun = (req, res) => {
                             userPermissions.getUserInfo(req.body.token).then(user => {
 
                                 let submitTime = {
+                                    run_id: mongoose.Types.ObjectId(),
                                     user_id: user.id,
                                     user_pseudo: user.pseudo,
                                     game: req.body.game,
@@ -344,9 +357,87 @@ const submitRun = (req, res) => {
     }
 }
 
+const validateOrRejectRun = (req, res) => {
+    if (!req.body.token){
+        res.status(401).json({
+            "res": "You must be connected"
+        })
+    } else {
+        userPermissions.getAdminPermission(req.body.token).then(decoded => {
+            if (decoded){
+                if (!req.body.championship_id || !req.body.run_id || !req.body.action){
+                    res.status(401).json({
+                        "res": "Missing Info"
+                    })
+                } else {
+                    let id = req.body.championship_id;
+                    Championship.findOne({_id: id}, (err, championship) => {
+                        if(err){
+                            res.status(500).json({
+                                "res": "Action Failed"
+                            })
+                        } else {
+
+                            let runId = req.body.run_id;
+                            let newTempRun = championship.temp_run.filter(run => run.run_id.toString() !== runId);
+
+                            if (req.body.action === "validate"){
+
+                                let run = championship.temp_run.filter(run => run.run_id.toString() === runId);
+
+                                let resultUpdate = championship.results.map(result => {
+                                    if (result[run.user_id] === run.user_id.toString()){
+                                        result[run.user_id][run.game].score = run.score;
+                                        result[run.user_id][run.game].time = run.time;
+                                    }
+                                    return result;
+                                });
+
+                                championship.updateOne({$set: {temp_run: newTempRun}}, {$set: {results: resultUpdate }}).then(result => {
+                                    if (result.nModified === 1){
+                                        res.status(200).json({
+                                            "res": "Run Validate",
+                                        })
+                                    } else {
+                                        res.status(500).json({
+                                            "res": "An Error occurred during validate run"
+                                        })
+                                    }
+                                });
+
+                            } else if (req.body.action === "reject"){
+
+                                championship.updateOne({$set: {temp_run: newTempRun}}).then(result => {
+                                    if (result.nModified === 1){
+                                        res.status(200).json({
+                                            "res": "Run reject",
+                                        })
+                                    } else {
+                                        res.status(500).json({
+                                            "res": "An Error occurred during reject run"
+                                        })
+                                    }
+                                });
+
+                            }
+
+
+                        }
+                    });
+                }
+            } else {
+                res.status(401).json({
+                    "res": "You are not authorized"
+                })
+            }
+        });
+    }
+}
+
 exports.create = createChampionship;
 exports.register = register;
 exports.getChampionshipByState = getChampionShipByState;
 exports.changeChampionshipState = changeChampionshipState;
 exports.updateGameParam = updateGameParam;
 exports.submitRun = submitRun;
+exports.validateOrRejectRun = validateOrRejectRun;

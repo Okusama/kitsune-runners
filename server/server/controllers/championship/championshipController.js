@@ -8,5 +8,6 @@ router.post("/getByState", championshipService.getChampionshipByState);
 router.post("/changeState", championshipService.changeChampionshipState);
 router.post("/updateGameParam", championshipService.updateGameParam);
 router.post("/submitRun", championshipService.submitRun);
+router.post("/validateOrRejectRun", championshipService.validateOrRejectRun);
 
 module.exports = router;

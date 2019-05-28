@@ -59,7 +59,7 @@ export default class ChampionshipDetail extends Component {
     render(){
         return(
             <div className="championshipDetail">
-                <Link to={{pathname: "/public/championship/validateTime", state:{championship: this.state.championship}}}>Validation Time</Link>
+                <Link to={{pathname: "/public/championship/submitTime", state:{championship: this.state.championship}}}>Validation Time</Link>
                 {this.createChampionshipDetail(this.state.championship)}
             </div>
         );

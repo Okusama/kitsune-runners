@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {submitRun} from "../../utils/Api";
 
-export default class ChampionshipValidateTime extends Component {
+export default class ChampionshipSubmitPlayerTime extends Component {
 
     constructor(props){
         super(props);
@@ -23,6 +23,13 @@ export default class ChampionshipValidateTime extends Component {
         this.setState({
             [event.target.name]: event.target.value
         })
+    }
+
+    convertTimeStringtoTimeInSec = (sTime) => {
+
+        let aTime = sTime.split(":");
+        return (+aTime[0]) * 60 * 60 + (+aTime[1]) * 60 + (+aTime[2]);
+
     }
 
     /**
@@ -48,37 +55,46 @@ export default class ChampionshipValidateTime extends Component {
 
     }
 
+    /**
+     * @param min String Time minimum of game Format "0:00:00"
+     * @param max String Time maximum of game Format "0:00:00"
+     * @param time String Time submit by player Format "0:00:00"
+     * @param difficultyCoef Int Difficulty coeficiant of game Format 1 || 2 || 3
+     * @returns {number}
+     */
     getScore = (min, max, time, difficultyCoef) => {
 
-        let calcCoef = 150;
+        /*Coef is include between 50 and 150 and represent the y of Mediant Point
+        * Must be between this number
+        **/
+        let calcCoef;
 
         switch (difficultyCoef) {
+            /*Easy*/
             case 1 : {
                 calcCoef = 150;
                 break;
+                /*Medium*/
             } case 2 : {
                 calcCoef = 100;
                 break;
+                /*Hard*/
             } case 3 : {
                 calcCoef = 50;
                 break;
             } default : {
+                calcCoef = 100;
                 break;
             }
         }
 
+        /*Convert String Time To Time in sec*/
         min = this.convertTimeStringtoTimeInSec(min);
         max = this.convertTimeStringtoTimeInSec(max);
         time = this.convertTimeStringtoTimeInSec(time);
 
+
         return Math.round(this.calcScoreByTime(min, 200, min + (max - min) / 2, calcCoef, max, 0, time));
-
-    }
-
-    convertTimeStringtoTimeInSec = (sTime) => {
-
-        let aTime = sTime.split(":");
-        return (+aTime[0]) * 60 * 60 + (+aTime[1]) * 60 + (+aTime[2]);
 
     }
 
@@ -117,23 +133,23 @@ export default class ChampionshipValidateTime extends Component {
 
     render(){
         return(
-          <div>
-              <form>
-                  <label htmlFor="selectedGame">Game :</label>
-                  <select name="selectedGame" id="selectedGame" onChange={this.handleChange} value={this.state.selectedGame}>
-                      {
-                          this.state.games.map(game => {
-                              return(<option value={game}>{game}</option>);
-                          })
-                      }
-                  </select>
-                  <label htmlFor="playerTime">Time</label>
-                  <input type="text" name="playerTime" id="playerTime" onChange={this.handleChange} value={this.state.playerTime}/>
-                  <label htmlFor="videoLink">Video Link</label>
-                  <input type="text" name="videoLink" id="videoLink" onChange={this.handleChange} value={this.state.videoLink}/>
-                  <button type="button" onClick={this.onSubmitValidateTimeForm}>Submit</button>
-              </form>
-          </div>
+            <div>
+                <form>
+                    <label htmlFor="selectedGame">Game :</label>
+                    <select name="selectedGame" id="selectedGame" onChange={this.handleChange} value={this.state.selectedGame}>
+                        {
+                            this.state.games.map(game => {
+                                return(<option value={game}>{game}</option>);
+                            })
+                        }
+                    </select>
+                    <label htmlFor="playerTime">Time</label>
+                    <input type="text" name="playerTime" id="playerTime" onChange={this.handleChange} value={this.state.playerTime}/>
+                    <label htmlFor="videoLink">Video Link</label>
+                    <input type="text" name="videoLink" id="videoLink" onChange={this.handleChange} value={this.state.videoLink}/>
+                    <button type="button" onClick={this.onSubmitValidateTimeForm}>Submit</button>
+                </form>
+            </div>
         );
     }
 

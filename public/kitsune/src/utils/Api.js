@@ -132,6 +132,10 @@ export const submitRun = data => {
     return fetch(url + "/championship/submitRun", postDataOption(data));
 };
 
+export const validateOrRejectRun = data => {
+    return fetch(url + "/championship/validateOrRejectRun", postDataOption(data));
+};
+
 /*Timer*/
 export const startAdminTimer = () => {
     socket.emit("adminStartTimer");
