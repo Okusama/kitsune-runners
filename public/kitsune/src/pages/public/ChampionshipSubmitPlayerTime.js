@@ -88,6 +88,8 @@ export default class ChampionshipSubmitPlayerTime extends Component {
             }
         }
 
+        console.log(min, max);
+
         /*Convert String Time To Time in sec*/
         min = this.convertTimeStringtoTimeInSec(min);
         max = this.convertTimeStringtoTimeInSec(max);

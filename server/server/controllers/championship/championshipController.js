@@ -4,6 +4,7 @@ const router = express.Router();
 
 router.post("/create", championshipService.create);
 router.post("/register", championshipService.register);
+router.post("/unregister", championshipService.unregister);
 router.post("/getByState", championshipService.getChampionshipByState);
 router.post("/changeState", championshipService.changeChampionshipState);
 router.post("/updateGameParam", championshipService.updateGameParam);

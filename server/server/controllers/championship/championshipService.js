@@ -80,19 +80,28 @@ const register = (req, res) => {
                                 "res": "You are already register for this championship"
                             })
                         } else {
+
                             let player = {
                                 id: user._id,
                                 pseudo: user.pseudo
                             };
-                            let games = {};
+
+                            let games = {
+                                "user_id": user._id,
+                                "total": 0,
+                                "scores": []
+                            };
 
                             for (let game of championship.games){
-                                games[user._id] = {};
-                                games[user._id][game] = {};
-                                games[user._id][game] = {
+
+                                let temp = {
+                                    "game": game,
                                     "time": "None",
                                     "score": 0
-                                }
+                                };
+
+                                games.scores.push(temp);
+
                             }
 
                             championship.updateOne({$push: { players: player, results: games}}).then( result => {
@@ -148,16 +157,20 @@ const unregister = (req, res) => {
                             res.status(423).json({
                                 "res": "This Championship is closed or finished"
                             })
-                        } else if (championship.isRegister(user._id, championship) !== undefined){
+                        } else if (championship.isRegister(user._id, championship) === undefined){
                             res.status(400).json({
                                 "res": "You are not register of this Championship"
                             })
                         } else {
+
                             let player = {
                                 id: user._id,
                                 pseudo: user.pseudo
-                            }
-                            championship.updateOne({$pull: { players: player}}).then( result => {
+                            };
+
+                            let newResults = championship.results.filter(run => run.user_id !== user._id);
+
+                            championship.updateOne({$pull: {players: player}, $set: {results: newResults}}).then( result => {
                                 if (result.nModified === 1){
                                     res.status(200).json({
                                         "res": "You are unregistered for the Championship"
@@ -180,6 +193,7 @@ const unregister = (req, res) => {
         });
     }
 };
+
 
 const getChampionShipByState = (req, res) => {
     if(!req.body.token){
@@ -307,7 +321,7 @@ const submitRun = (req, res) => {
             "res": "You must be connected"
         })
     } else {
-        userPermissions.getAdminPermission(req.body.token).then(decoded => {
+        userPermissions.getApiPermission(req.body.token).then(decoded => {
             if (decoded){
                 if (!req.body.championship_id || !req.body.game || !req.body.score || !req.body.time || !req.body.video_link){
                     res.status(401).json({
@@ -386,14 +400,20 @@ const validateOrRejectRun = (req, res) => {
                                 let run = championship.temp_run.filter(run => run.run_id.toString() === runId);
 
                                 let resultUpdate = championship.results.map(result => {
-                                    if (result[run.user_id] === run.user_id.toString()){
-                                        result[run.user_id][run.game].score = run.score;
-                                        result[run.user_id][run.game].time = run.time;
+
+                                    if (result.user_id === run[0].user_id){
+                                        for (let score of result.scores){
+                                            if (score.game === run[0].game){
+                                                score.time = run[0].time;
+                                                score.score = run[0].score;
+                                            }
+                                            result.total += score.score;
+                                        }
                                     }
                                     return result;
                                 });
 
-                                championship.updateOne({$set: {temp_run: newTempRun}}, {$set: {results: resultUpdate }}).then(result => {
+                                championship.updateOne({$set: {temp_run: newTempRun, results: resultUpdate}}).then(result => {
                                     if (result.nModified === 1){
                                         res.status(200).json({
                                             "res": "Run Validate",
@@ -436,6 +456,7 @@ const validateOrRejectRun = (req, res) => {
 
 exports.create = createChampionship;
 exports.register = register;
+exports.unregister = unregister;
 exports.getChampionshipByState = getChampionShipByState;
 exports.changeChampionshipState = changeChampionshipState;
 exports.updateGameParam = updateGameParam;
