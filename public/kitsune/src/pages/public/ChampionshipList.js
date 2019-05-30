@@ -1,19 +1,17 @@
 import React, {Component} from "react";
 import {getChampionshipByState} from "../../utils/Api";
-import {List} from "../../components/layout/List";
-import {Link} from "react-router-dom";
+import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class ChampionshipList extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            state: "open",
+            championshipState: "open",
             token: localStorage.getItem("token"),
-            data: []
+            championshipList: []
         };
-        this.handleDetailClick.bind(this);
-        this.getChampionship(this.state.state);
+        this.getChampionship(this.state.championshipState);
     }
 
     setDataListState = (newElement) => {
@@ -23,22 +21,20 @@ export default class ChampionshipList extends Component {
     }
 
     getChampionship = (state) => {
+
         let sendData = {
             token: this.state.token,
             state: state
         };
+        console.log(sendData);
         getChampionshipByState(sendData).then(json => {
             return json.json();
-        }).then( res => {
-            console.log(res);
-            let datas = res.res;
-            for(let data in datas){
-                let championship = datas[data];
-                let newElement = {
-                    key: championship._id,
-                    data: this.constructChampionshipItemList(championship)
-                };
-                this.setDataListState(newElement);
+        }).then( data => {
+
+            if (typeof data.res !== "string"){
+                this.setState({ championshipList: data.res});
+            } else {
+                console.log(data.res);
             }
 
         }).catch(err => {
@@ -47,39 +43,43 @@ export default class ChampionshipList extends Component {
 
     }
 
-    constructChampionshipItemList = data => {
-        return(
-            <div key={data._id}>
-                <h3>{data.name}</h3>
-                <p>{data.start_at}</p>
-                <p>{data.players.length}</p>
-                <Link to={{pathname : "/public/championship/detail", state: {data: data}}}>Detail</Link>
-            </div>
-        );
-    }
-
     handleDetailClick = event => {
         this.setState({
-            data: [],
-            state: event.target.getAttribute("data-value")
+            championshipList: [],
+            championshipState: event.target.getAttribute("data-value")
         }, () => {
-            this.getChampionship(this.state.state);
+            this.getChampionship(this.state.championshipState);
         });
 
     }
 
     render(){
+
+        let championshipList = this.state.championshipList.map((championship, index) =>
+            <ItemThumb
+                key={index}
+                name={championship.name}
+                startAt={championship.start_at}
+                nbPlayers={championship.players.length}
+                item={championship}
+                itemType={"championship"}
+            />
+        );
+
+        let status = this.state.championshipState;
+
         return (
-            <div className="championshipList">
+            <div className="itemList">
                 <nav>
                     <ul>
-                        <li><h1>{this.state.state}</h1></li>
-                        <li><button data-value="open" onClick={this.handleDetailClick}>Open</button></li>
-                        <li><button data-value="close" onClick={this.handleDetailClick}>Close</button></li>
-                        <li><button data-value="finished" onClick={this.handleDetailClick}>Finished</button></li>
+                        <li><button className={status === "open" ? "active-button-form" : "button-form"} data-value="open" onClick={this.handleDetailClick}>Open</button></li>
+                        <li><button className={status === "close" ? "active-button-form" : "button-form"} data-value="close" onClick={this.handleDetailClick}>Close</button></li>
+                        <li><button className={status === "finished" ? "active-button-form" : "button-form"} data-value="finished" onClick={this.handleDetailClick}>Finished</button></li>
                     </ul>
                 </nav>
-                <List data={this.state.data}/>
+                <ul>
+                    {championshipList}
+                </ul>
             </div>
         );
     }

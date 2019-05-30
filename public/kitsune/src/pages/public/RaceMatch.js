@@ -17,8 +17,8 @@ class RaceMatch extends Component {
 
     componentDidMount() {
 
-        //const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-        const socket = socketIOClient("http://localhost:8000");
+        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
+        //const socket = socketIOClient("http://localhost:8000");
 
         socket.on("adminStopPlayerTimer", (time, playerId) => {
             this.props.runActionRaceStopPlayerTime(time, playerId);
@@ -64,13 +64,15 @@ class RaceMatch extends Component {
         });
 
         return(
-          <div>
+          <div className="raceMatches">
               <div>
                   <button className="button-form" onClick={this.onPlayerStopTimer}>Stop you're time</button>
                   <Timer isControl={false}/>
               </div>
               <div className="playerList">
-                  {playerList}
+                  <ul>
+                      {playerList}
+                  </ul>
               </div>
           </div>
         );

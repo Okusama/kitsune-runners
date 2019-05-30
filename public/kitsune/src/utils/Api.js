@@ -1,7 +1,7 @@
 import openSocket from "socket.io-client";
 
-//const url = "https://aqueous-taiga-46436.herokuapp.com";
-const url = "http://localhost:8000";
+const url = "https://aqueous-taiga-46436.herokuapp.com";
+//const url = "http://localhost:8000";
 const socket = openSocket(url);
 const headers = {
     "Content-Type": "application/json",

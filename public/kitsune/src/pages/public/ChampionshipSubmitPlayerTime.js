@@ -88,8 +88,6 @@ export default class ChampionshipSubmitPlayerTime extends Component {
             }
         }
 
-        console.log(min, max);
-
         /*Convert String Time To Time in sec*/
         min = this.convertTimeStringtoTimeInSec(min);
         max = this.convertTimeStringtoTimeInSec(max);
@@ -135,7 +133,7 @@ export default class ChampionshipSubmitPlayerTime extends Component {
 
     render(){
         return(
-            <div>
+            <div className="submitPlayerTime">
                 <form>
                     <label htmlFor="selectedGame">Game :</label>
                     <select name="selectedGame" id="selectedGame" onChange={this.handleChange} value={this.state.selectedGame}>
@@ -149,7 +147,7 @@ export default class ChampionshipSubmitPlayerTime extends Component {
                     <input type="text" name="playerTime" id="playerTime" onChange={this.handleChange} value={this.state.playerTime}/>
                     <label htmlFor="videoLink">Video Link</label>
                     <input type="text" name="videoLink" id="videoLink" onChange={this.handleChange} value={this.state.videoLink}/>
-                    <button type="button" onClick={this.onSubmitValidateTimeForm}>Submit</button>
+                    <button className="button-form" type="button" onClick={this.onSubmitValidateTimeForm}>Submit</button>
                 </form>
             </div>
         );

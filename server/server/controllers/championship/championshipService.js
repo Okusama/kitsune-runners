@@ -407,7 +407,9 @@ const validateOrRejectRun = (req, res) => {
                                                 score.time = run[0].time;
                                                 score.score = run[0].score;
                                             }
-                                            result.total += score.score;
+                                            let newResult = 0;
+                                            newResult += score.score;
+                                            result.total = newResult;
                                         }
                                     }
                                     return result;
