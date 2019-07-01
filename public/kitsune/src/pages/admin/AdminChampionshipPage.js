@@ -33,13 +33,22 @@ export default class AdminChampionshipPage extends Component {
         if(this.state.games.length === 0) return;
 
         let games = this.state.games.split(",");
+        let params = {};
+        for (let game of games){
+            params[game] = {
+                min: "0:00:00",
+                max: "0:00:00",
+                difficulty_coef: 1
+            }
+        }
 
         let sendData = {
             name: this.state.name,
             start_at: this.state.start_at,
             token: this.state.token,
             state: "open",
-            games: games
+            games: games,
+            params: params
         };
 
         createChampionship(sendData).then(json => {
@@ -59,7 +68,7 @@ export default class AdminChampionshipPage extends Component {
             championship_state: this.state.state_combo,
             championship_id: event.target.getAttribute("data-id")
         };
-        console.log(sendData);
+
         changeChampionshipState(sendData).then(json => {
             return json.json();
         }).then(res => {
@@ -69,23 +78,24 @@ export default class AdminChampionshipPage extends Component {
     }
 
     getChampionships = (state) => {
+
         let sendData = {
             token: this.state.token,
             state: state
         };
+
         getChampionshipByState(sendData).then(json => {
             return json.json();
         }).then( res => {
             let datas = res.res;
             for(let data in datas){
-                let tournament = datas[data];
+                let championship = datas[data];
                 let newElement = {
-                    key: tournament._id,
-                    data: this.constructAdminChampionshipItemList(tournament, state)
+                    key: championship._id,
+                    data: this.constructAdminChampionshipItemList(championship, state)
                 };
                 this.setDataListState(newElement);
             }
-
         }).catch(err => {
             console.log(err);
         });
@@ -137,7 +147,7 @@ export default class AdminChampionshipPage extends Component {
                 <h3>{data.name}</h3>
                 <p>{data.start_at}</p>
                 <p>{data.players.length}</p>
-                <Link to={{pathname: "/public/championship/detail", state: {data: data}}}>Detail</Link>
+                <Link to={{pathname: "/admin/championship/management", state: {data: data}}}>Detail</Link>
                 <form>
                     {combo}
                     { state !== "finished" ? <button type="button" data-id={data._id} onClick={this.handleSubmitChangeChampionshipState}>Send</button> : false}

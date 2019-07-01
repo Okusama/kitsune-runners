@@ -1,7 +1,7 @@
 import openSocket from "socket.io-client";
 
-//const url = "https://aqueous-taiga-46436.herokuapp.com";
-const url = "http://localhost:8000";
+const url = "https://aqueous-taiga-46436.herokuapp.com";
+//const url = "http://localhost:8000";
 const socket = openSocket(url);
 const headers = {
     "Content-Type": "application/json",
@@ -122,6 +122,22 @@ export const changeChampionshipState = data => {
 
 export const registerChampionship = data => {
   return fetch(url + "/championship/register", postDataOption(data))
+};
+
+export const unregisterChampionship = data => {
+    return fetch(url + "/championship/unregister", postDataOption(data))
+};
+
+export const updateGameParam = data => {
+    return fetch(url + "/championship/updateGameParam", postDataOption(data));
+};
+
+export const submitRun = data => {
+    return fetch(url + "/championship/submitRun", postDataOption(data));
+};
+
+export const validateOrRejectRun = data => {
+    return fetch(url + "/championship/validateOrRejectRun", postDataOption(data));
 };
 
 /*Timer*/

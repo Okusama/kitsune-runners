@@ -32,6 +32,10 @@
   box-shadow: inset 3px 0px 10px 10px rgba(133, 37, 37, 0.75);
 }
 
+.hidden {
+  display: none;
+}
+
 /************************************/
 /*             General              */
 /************************************/
@@ -55,6 +59,10 @@ a {
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-family: "Header_Font";
+}
+
+input, select, textarea {
+  color: black;
 }
 
 /************************************/
@@ -181,6 +189,28 @@ main {
 /************************************/
 /*         GeneralList           */
 /************************************/
+.itemList nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.itemList nav ul {
+  width: 25vw;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.itemList ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+}
+.itemList ul li + li {
+  margin-top: 5px;
+}
+
 .itemThumb {
   width: 75vw;
   border: 2px solid black;
@@ -232,31 +262,6 @@ main {
 }
 
 /************************************/
-/*         TournamentList           */
-/************************************/
-.tournamentList nav {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.tournamentList nav ul {
-  width: 25vw;
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-.tournamentList ul {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  list-style: none;
-}
-.tournamentList ul li + li {
-  margin-top: 5px;
-}
-
-/************************************/
 /*         TournamentDetail         */
 /************************************/
 .tournamentDetail, .raceDetail {
@@ -300,17 +305,38 @@ main {
 /************************************/
 /*        TournamentMatches         */
 /************************************/
-.tournamentMatches {
+.tournamentMatches, .raceMatches {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.tournamentMatches > div:first-of-type {
+.tournamentMatches > div:first-of-type, .raceMatches > div:first-of-type {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 50vw;
   margin-bottom: 15px;
+}
+
+/************************************/
+/*            RaceMatches           */
+/************************************/
+.playerList {
+  width: 100vw;
+}
+.playerList ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.playerList ul li {
+  width: 10vw;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 /************************************/
@@ -386,6 +412,55 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+/************************************/
+/*        Championship Detail       */
+/************************************/
+.championshipDetail .championshipDetailHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.championshipDetail .championshipDetailHeader div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.championshipDetail .playerScores {
+  margin-top: 25px;
+  border: 2px solid white;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: center;
+  font-size: 2rem;
+}
+.championshipDetail .playerScores th, .championshipDetail .playerScores td {
+  border: 1px solid white;
+  height: 25px;
+}
+
+.submitPlayerTime {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.submitPlayerTime form {
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.submitPlayerTime form input, .submitPlayerTime form select {
+  height: 50px;
+  border: 3px solid #AAACA9;
+  border-radius: 30px;
+  font-size: 2rem;
+  padding: 10px;
+  margin: 10px;
 }
 
 /************************************/

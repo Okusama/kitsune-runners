@@ -65,7 +65,7 @@ export default class TournamentList extends Component {
         let status = this.state.tournamentState;
 
         return (
-            <div className="tournamentList">
+            <div className="itemList">
                 <nav>
                     <ul>
                         <li><button className={status === "open" ? "active-button-form" : "button-form"} data-value="open" onClick={this.handleDetailClick}>Open</button></li>

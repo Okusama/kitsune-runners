@@ -18,21 +18,26 @@ let championshipSchema = mongoose.Schema({
         default: []
     },
     games: {
-        type: [String],
+        type: Array,
         required: true
     },
     results: {
-        type: {
-            player: String,
-            game: String,
-            score: Number
-        }
+        type: Array,
+        default: []
+    },
+    temp_run: {
+        type: Array,
+        default: []
+    },
+    params: {
+        type: Array,
+        default: []
     }
 });
 
 championshipSchema.methods = {
     isRegister : (user_id, championship) => {
-        return championship.players.find(player => player === user_id);
+        return championship.players.find(player => player.id === user_id);
     }
 };
 

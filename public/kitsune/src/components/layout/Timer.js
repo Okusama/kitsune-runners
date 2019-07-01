@@ -21,8 +21,8 @@ class Timer extends Component {
 
     componentDidMount() {
 
-        //const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-        const socket = socketIOClient("http://localhost:8000");
+        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
+        //const socket = socketIOClient("http://localhost:8000");
 
         if (!this.props.user.isAdmin){
             socket.on("startPlayerTimer", () => {
