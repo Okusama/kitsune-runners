@@ -1,6 +1,6 @@
 const Tournament = require("../../schema/tournamentSchema");
-const User = require("../../schema/userSchema");
 const jwt = require("jwt-simple");
+const sanitize = require("mongo-sanitize");
 const jwtConfig = require("../../config/jwt-config");
 const client = require("../../config/challonge");
 const userUtils = require("../../utils/userUtils");
@@ -24,9 +24,11 @@ const createTournament = (req, res) => {
                     for (var i = 0; i < 15; i++) {
                         url += possible.charAt(Math.floor(Math.random() * possible.length));
                     }
+                    let name = sanitize(req.body.name);
+                    let startAt = sanitize(req.body.start_at);
                     client.tournaments.create({
                         tournament: {
-                            name: req.body.name,
+                            name: name,
                             url: url,
                         },
                         callback: (err, data) => {
@@ -36,8 +38,8 @@ const createTournament = (req, res) => {
                                 });
                             } else {
                                 let tournament = {
-                                    name: req.body.name,
-                                    start_at: req.body.start_at,
+                                    name: name,
+                                    start_at: startAt,
                                     state: "open",
                                     bracket_url: url
                                 };
@@ -81,64 +83,67 @@ const register = (req, res) => {
                         "res": "Bad Request Miss Tournament Id"
                     })
                 } else {
-                    let user = jwt.decode(req.body.token, jwtConfig.secret);
-                    Tournament.findOne({
-                        _id: req.body.tournament_id
-                    }, (err, tournament) => {
-                        if (err) {
-                            res.status(500).json({
-                                "res": "Internal Server Error"
-                            })
-                        } else if (!tournament) {
-                            res.status(404).json({
-                                "res": "Tournament not Found"
-                            })
-                        } else if (tournament.state === "close" || tournament.state === "finished"){
-                            res.status(423).json({
-                                "res": "This Tournament is closed or finished"
-                            })
-                        } else if (tournament.isRegister(user._id, tournament) !== undefined){
-                            res.status(400).json({
-                                "res": "You are already register for this tournament"
-                            })
-                        } else {
-                            client.participants.create({
-                                id: tournament.bracket_url,
-                                participant: {
-                                    name: user.pseudo
-                                },
-                                callback: (err, data) => {
-                                    if (err) {
-                                        res.status(500).json({
-                                            "res": "An Error occurred during register at Challonge"
-                                        })
-                                    } else {
-                                        let player = {
-                                            id: user._id,
-                                            challonge_id: data.participant.id,
-                                            pseudo: user.pseudo,
-                                            twitch_login: user.twitch_login
-                                        };
-                                        tournament.updateOne({$push: {players: player}}).then( result => {
-                                            if (result.nModified === 1){
-                                                Tournament.findOne({
-                                                    _id: req.body.tournament_id
-                                                }, (err, tournament) => {
-                                                    res.status(200).json({
-                                                        "res": "You are registered for the tournament",
-                                                        "tournament": tournament
+                    userUtils.getUserInfo(req.body.token).then(user => {
+                        console.log(user);
+                        let tournamentId = sanitize(req.body.tournament_id);
+                        Tournament.findOne({
+                            _id: tournamentId
+                        }, (err, tournament) => {
+                            if (err) {
+                                res.status(500).json({
+                                    "res": "Internal Server Error"
+                                })
+                            } else if (!tournament) {
+                                res.status(404).json({
+                                    "res": "Tournament not Found"
+                                })
+                            } else if (tournament.state === "close" || tournament.state === "finished"){
+                                res.status(423).json({
+                                    "res": "This Tournament is closed or finished"
+                                })
+                            } else if (tournament.isRegister(user._id, tournament) !== undefined){
+                                res.status(400).json({
+                                    "res": "You are already register for this tournament"
+                                })
+                            } else {
+                                client.participants.create({
+                                    id: tournament.bracket_url,
+                                    participant: {
+                                        name: user.pseudo
+                                    },
+                                    callback: (err, data) => {
+                                        if (err) {
+                                            res.status(500).json({
+                                                "res": "An Error occurred during register at Challonge"
+                                            })
+                                        } else {
+                                            let player = {
+                                                id: user._id,
+                                                challonge_id: data.participant.id,
+                                                pseudo: user.pseudo,
+                                                twitch_login: user.twitch_login
+                                            };
+                                            tournament.updateOne({$push: {players: player}}).then( result => {
+                                                if (result.nModified === 1){
+                                                    Tournament.findOne({
+                                                        _id: tournamentId
+                                                    }, (err, tournament) => {
+                                                        res.status(200).json({
+                                                            "res": "You are registered for the tournament",
+                                                            "tournament": tournament
+                                                        })
                                                     })
-                                                })
-                                            } else {
-                                                res.status(500).json({
-                                                    "res": "An Error occurred during register"
-                                                })
-                                            }
-                                        });
+                                                } else {
+                                                    res.status(500).json({
+                                                        "res": "An Error occurred during register"
+                                                    })
+                                                }
+                                            });
+                                        }
                                     }
-                                }
-                            });
-                        }
+                                });
+                            }
+                        });
                     });
                 }
             } else {
