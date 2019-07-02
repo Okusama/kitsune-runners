@@ -107,7 +107,7 @@ class AdminRunManagement extends Component {
 
         let sendData = {
             token: this.state.token,
-            tournament_id: this.state.tournament._id,
+            tournament_id: this.state.item._id,
             matches: this.props.matchSelected
         };
 

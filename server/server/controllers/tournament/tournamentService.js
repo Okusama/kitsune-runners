@@ -1,7 +1,5 @@
 const Tournament = require("../../schema/tournamentSchema");
-const jwt = require("jwt-simple");
 const sanitize = require("mongo-sanitize");
-const jwtConfig = require("../../config/jwt-config");
 const client = require("../../config/challonge");
 const userUtils = require("../../utils/userUtils");
 const utils = require("../../utils/generalUtils");
@@ -84,7 +82,6 @@ const register = (req, res) => {
                     })
                 } else {
                     userUtils.getUserInfo(req.body.token).then(user => {
-                        console.log(user);
                         let tournamentId = sanitize(req.body.tournament_id);
                         Tournament.findOne({
                             _id: tournamentId
@@ -168,72 +165,73 @@ const unregister = (req, res) => {
                         "res": "Bad Request Miss Tournament Id"
                     })
                 } else {
-                    let user = jwt.decode(req.body.token, jwtConfig.secret);
-                    Tournament.findOne({
-                        _id: req.body.tournament_id
-                    }, (err, tournament) => {
-                        if (err) {
-                            res.status(500).json({
-                                "res": "Internal Server Error"
-                            })
-                        } else if (!tournament) {
-                            res.status(404).json({
-                                "res": "Tournament not Found"
-                            })
-                        } else if (tournament.state === "close" || tournament.state === "finished"){
-                            res.status(423).json({
-                                "res": "This Tournament is closed or finished"
-                            })
-                        } else if (tournament.isRegister(user._id, tournament) === undefined){
-                            res.status(400).json({
-                                "res": "You are not register for this tournament"
-                            })
-                        } else {
+                    userUtils.getUserInfo(req.body.token).then(user => {
+                        let tournamentId = sanitize(req.body.tournament_id);
+                        Tournament.findOne({
+                            _id: tournamentId
+                        }, (err, tournament) => {
+                            if (err) {
+                                res.status(500).json({
+                                    "res": "Internal Server Error"
+                                })
+                            } else if (!tournament) {
+                                res.status(404).json({
+                                    "res": "Tournament not Found"
+                                })
+                            } else if (tournament.state === "close" || tournament.state === "finished"){
+                                res.status(423).json({
+                                    "res": "This Tournament is closed or finished"
+                                })
+                            } else if (tournament.isRegister(user._id, tournament) === undefined){
+                                res.status(400).json({
+                                    "res": "You are not register for this tournament"
+                                })
+                            } else {
 
-                            let challongeId = null;
+                                let challongeId = null;
 
-                            for(let player of tournament.players){
-                                console.log(player);
-                                if (player.id === user._id){
-                                    challongeId = player.challonge_id
+                                for(let player of tournament.players){
+                                    if (player.id === user._id){
+                                        challongeId = player.challonge_id
+                                    }
+                                }
+
+                                if (challongeId !== null){
+                                    client.participants.destroy({
+                                        id: tournament.bracket_url,
+                                        participantId: challongeId,
+                                        callback: (err, data) => {
+                                            if (err){
+                                                res.status(500).json({
+                                                    "res": "An Error occurred during unregistered on challonge"
+                                                })
+                                            } else {
+                                                tournament.updateOne({$pull: { players: { id: user._id} }}).then( result => {
+                                                    if (result.nModified === 1){
+                                                        Tournament.findOne({
+                                                            _id: tournamentId
+                                                        }, (err, tournament) => {
+                                                            res.status(200).json({
+                                                                "res": "You are Unregistered for the tournament",
+                                                                "tournament": tournament
+                                                            })
+                                                        })
+                                                    } else {
+                                                        res.status(500).json({
+                                                            "res": "An Error occurred during unregistered of tournament"
+                                                        })
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    res.status(500).json({
+                                        "res": "An Error occurred during unregistered"
+                                    })
                                 }
                             }
-
-                            if (challongeId !== null){
-                                client.participants.destroy({
-                                    id: tournament.bracket_url,
-                                    participantId: challongeId,
-                                    callback: (err, data) => {
-                                        if (err){
-                                            res.status(500).json({
-                                                "res": "An Error occurred during unregistered on challonge"
-                                            })
-                                        } else {
-                                            tournament.updateOne({$pull: { players: { id: user._id} }}).then( result => {
-                                                if (result.nModified === 1){
-                                                    Tournament.findOne({
-                                                        _id: req.body.tournament_id
-                                                    }, (err, tournament) => {
-                                                        res.status(200).json({
-                                                            "res": "You are Unregistered for the tournament",
-                                                            "tournament": tournament
-                                                        })
-                                                    })
-                                                } else {
-                                                    res.status(500).json({
-                                                        "res": "An Error occurred during unregistered of tournament"
-                                                    })
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                res.status(500).json({
-                                    "res": "An Error occurred during unregistered"
-                                })
-                            }
-                        }
+                        });
                     });
                 }
             } else {
@@ -254,7 +252,7 @@ const getTournamentByState = (req, res) => {
     } else {
         userUtils.getApiPermission(req.body.token).then( decoded => {
             if(decoded){
-                let stateFilter = utils.escapeHtml(req.body.state);
+                let stateFilter = sanitize(req.body.state);
                 Tournament.find({state: stateFilter}, (err, tournaments) => {
                     if (err) {
                         res.status(500).json({
@@ -292,8 +290,8 @@ const changeTournamentState = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
-                    let state = utils.escapeHtml(req.body.tournament_state);
+                    let id = sanitize(req.body.tournament_id);
+                    let state = sanitize(req.body.tournament_state);
                     Tournament.findByIdAndUpdate(id, {state: state}, (err, tournament) => {
                        if(err){
                            res.status(500).json({
@@ -329,7 +327,7 @@ const startTournament = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if(err){
                             res.status(500).json({
@@ -403,7 +401,7 @@ const getOpenMatches = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if(err){
                             res.status(500).json({
@@ -482,14 +480,14 @@ const initRound = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if(err){
                             res.status(500).json({
                                 "res": "Update Failed"
                             })
                         } else {
-                            let currentRound = req.body.matches;
+                            let currentRound = sanitize(req.body.matches);
                             tournament.updateOne({$set: {currentRound: currentRound}}).then( result => {
                                 if (result.nModified === 1){
                                     res.status(200).json({
@@ -526,7 +524,7 @@ const getRound = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if(err){
                             res.status(404).json({
@@ -569,23 +567,25 @@ const validateScoreRound = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if(err){
                             res.status(404).json({
                                 "res": "Tournament not Found"
                             })
                         } else {
+                            let matchId = sanitize(req.body.match_id);
+                            let score = sanitize(req.body.score);
+                            let winnerId = sanitize(req.body.winner_id);
                             client.matches.update({
                                id: tournament.bracket_url,
-                               matchId: req.body.match_id,
+                               matchId: matchId,
                                match: {
-                                   scoresCsv: req.body.score,
-                                   winnerId: req.body.winner_id
+                                   scoresCsv: score,
+                                   winnerId: winnerId
                                },
                                 callback: (err, data) => {
                                    if (err) {
-                                       console.log(err);
                                        res.status(500).json({
                                            "res": "Match Not Register",
                                            "match": req.body.match_id
@@ -623,7 +623,7 @@ const clearRound = (req, res) => {
                         "res": "Missing Info"
                     })
                 } else {
-                    let id = utils.escapeHtml(req.body.tournament_id);
+                    let id = sanitize(req.body.tournament_id);
                     Tournament.findOne({_id: id}, (err, tournament) => {
                         if (err) {
                             res.status(404).json({
