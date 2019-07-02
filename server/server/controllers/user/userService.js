@@ -101,12 +101,16 @@ const signin = (req, res) => {
                     "res": "User doesn't exist"
                 })
             } else {
-                console.log(user);
                 if (user.authenticate(req.body.password)){
-
+                    let userToken = {
+                        role: user.role,
+                        id: user._id,
+                        pseudo: user.pseudo,
+                        avatar: user.avatar
+                    };
                     res.status(200).json({
                         "res": "Successful authentication",
-                        "token": user.getToken(),
+                        "token": user.getToken(userToken),
                         "isLogin": true,
                         "isAdmin": user.role === "admin",
                         "userId": user._id,
