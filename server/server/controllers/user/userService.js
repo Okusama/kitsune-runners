@@ -2,7 +2,7 @@ const User = require("../../schema/userSchema");
 const bcrypt = require("bcrypt");
 const bcryptConfig = require("../../config/bcrypt-config");
 const userUtils = require("../../utils/userUtils");
-const generalUtils = require("../../utils/generalUtils");
+const sanitize = require("mongo-sanitize");
 
 /**
  * Register User
@@ -19,11 +19,14 @@ const signup = (req, res) => {
 
     } else {
         //Init User
-        bcrypt.hash(req.body.password, bcryptConfig.saltRounds).then( hash => {
+        let email = sanitize(req.body.email);
+        let password = sanitize(req.body.password);
+        let pseudo = sanitize(req.body.pseudo);
+        bcrypt.hash(password, bcryptConfig.saltRounds).then( hash => {
             let user = {
-                email: req.body.email,
+                email: email,
                 password: hash,
-                pseudo: req.body.pseudo,
+                pseudo: pseudo,
                 twitch_login: ""
             };
             //Create a Promise if user's email already exist
@@ -54,7 +57,6 @@ const signup = (req, res) => {
                     } else {
                         res.status(200).json({
                             "res": "User Register",
-                            "token": user.getToken()
                         })
                     }
                 })
@@ -90,8 +92,10 @@ const signin = (req, res) => {
             "res": "Bad Request"
         })
     } else {
+        let email = sanitize(req.body.email);
+        let password = sanitize(req.body.password);
         User.findOne({
-            email: req.body.email
+            email: email
         }, (err, user) => {
             if (err) {
                 res.status(500).json({
@@ -102,10 +106,17 @@ const signin = (req, res) => {
                     "res": "User doesn't exist"
                 })
             } else {
-                if (user.authenticate(req.body.password)){
+                if (user.authenticate(password)){
+                    let userToken = {
+                        role: user.role,
+                        _id: user._id,
+                        pseudo: user.pseudo,
+                        avatar: user.avatar,
+                        twitch_login: user.twitch_login
+                    };
                     res.status(200).json({
                         "res": "Successful authentication",
-                        "token": user.getToken(),
+                        "token": user.getToken(userToken),
                         "isLogin": true,
                         "isAdmin": user.role === "admin",
                         "userId": user._id,
@@ -142,7 +153,7 @@ const authenticated = (req, res) => {
                             "res": "Valid User",
                             "isLogin": true,
                             "isAdmin": isAdmin,
-                            "userId": user.id,
+                            "userId": user._id,
                             "avatar": user.avatar
                         })
                     });
@@ -169,7 +180,7 @@ const getUsersByRole = (req, res) => {
                         "res": "Missing wanted role"
                     })
                 } else {
-                    let role = generalUtils.escapeHtml(req.body.role);
+                    let role = sanitize(req.body.role);
                     User.find({role: role}, (err, users) => {
                         if(err){
                             res.status(500).json({
@@ -215,8 +226,8 @@ const changeUserRole = (req, res) => {
                         "res": "Missing new role"
                     })
                 } else {
-                    let userId = generalUtils.escapeHtml(req.body.user_id);
-                    let newRole = generalUtils.escapeHtml(req.body.role);
+                    let userId = sanitize(req.body.user_id);
+                    let newRole = sanitize(req.body.role);
                     User.findByIdAndUpdate(userId, {role: newRole}, (err, user) => {
                         if(err){
                             res.status(500).json({
@@ -259,9 +270,9 @@ const registerTwitchLoginAndAvatar = (req, res) => {
                         "res": "Missing twitch login"
                     });
                 } else {
-                    let userId = generalUtils.escapeHtml(req.body.user_id);
-                    let avatar = generalUtils.escapeHtml(req.body.profile_image_url);
-                    let twitchLogin = generalUtils.escapeHtml(req.body.twitch_login);
+                    let userId = sanitize(req.body.user_id);
+                    let avatar = sanitize(req.body.profile_image_url);
+                    let twitchLogin = sanitize(req.body.twitch_login);
                     User.findByIdAndUpdate(userId, {twitch_login: twitchLogin, avatar: avatar}, (err, user) => {
                         if(err){
                             res.status(500).json({

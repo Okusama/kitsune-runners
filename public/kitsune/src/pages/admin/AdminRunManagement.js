@@ -10,6 +10,7 @@ import {
     runActionTournamentStopPlayerTime
 } from "../../redux/actions";
 import {
+    url,
     getRound,
     initRound,
     adminStopPlayerTimer,
@@ -38,8 +39,7 @@ class AdminRunManagement extends Component {
 
     componentDidMount() {
 
-        //const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-        const socket = socketIOClient("http://localhost:8000");
+        const socket = socketIOClient(url);
 
         switch (this.state.item_type) {
 
@@ -107,7 +107,7 @@ class AdminRunManagement extends Component {
 
         let sendData = {
             token: this.state.token,
-            tournament_id: this.state.tournament._id,
+            tournament_id: this.state.item._id,
             matches: this.props.matchSelected
         };
 

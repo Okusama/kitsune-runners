@@ -49,8 +49,8 @@ userSchema.methods = {
             return err;
         });
     },
-    getToken: function(){
-        return jwt.encode(this, jwtConfig.secret);
+    getToken: function(user){
+        return jwt.encode(user, jwtConfig.secret);
     }
 };
 

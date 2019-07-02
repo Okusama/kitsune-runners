@@ -29,9 +29,10 @@ const getUserInfo = (token) => {
   return decode(token)
       .then(decoded => {
           return {
-              id: decoded._id,
+              _id: decoded._id,
               pseudo: decoded.pseudo,
-              avatar: decoded.avatar
+              avatar: decoded.avatar,
+              twitch_login: decoded.twitch_login
           }
       })
       .catch(err => false)

@@ -64,6 +64,8 @@ class RaceDetail extends Component{
     renderRaceDetail = race => {
 
         let hasRegister = race.players.filter(player => player.id === this.props.user.id);
+        console.log(race.players);
+        console.log(this.props.user);
 
         return(
             <div>
