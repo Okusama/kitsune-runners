@@ -2,7 +2,7 @@ import React , {Component} from "react";
 import Timer from "../../components/layout/Timer";
 import {connect} from "react-redux";
 import {runActionRaceStopPlayerTime, runActionSetRacePlayers} from "../../redux/actions";
-import {playerStopPlayerTimer} from "../../utils/Api";
+import {url, playerStopPlayerTimer} from "../../utils/Api";
 import socketIOClient from "socket.io-client";
 
 class RaceMatch extends Component {
@@ -12,13 +12,11 @@ class RaceMatch extends Component {
         this.state = {
             race: this.props.location.state.race
         }
-
     }
 
     componentDidMount() {
 
-        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-        //const socket = socketIOClient("http://localhost:8000");
+        const socket = socketIOClient(url);
 
         socket.on("adminStopPlayerTimer", (time, playerId) => {
             this.props.runActionRaceStopPlayerTime(time, playerId);

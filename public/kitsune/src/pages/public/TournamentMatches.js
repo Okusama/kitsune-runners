@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import socketIOClient from "socket.io-client";
 
-import {getRound, playerStopPlayerTimer} from "../../utils/Api";
+import {url, getRound, playerStopPlayerTimer} from "../../utils/Api";
 import {runActionSetMatchSelected, runActionTournamentStopPlayerTime} from "../../redux/actions";
 
 import Match from "../../components/layout/Match";
@@ -24,7 +24,7 @@ class TournamentMatches extends Component {
     componentDidMount() {
 
         //Init Socket listener for timer
-        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
+        const socket = socketIOClient(url);
 
         socket.on("adminStopPlayerTimer", (time, playerId) => {
             this.props.runActionTournamentStopPlayerTime(time, playerId);

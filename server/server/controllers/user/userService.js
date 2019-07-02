@@ -54,7 +54,6 @@ const signup = (req, res) => {
                     } else {
                         res.status(200).json({
                             "res": "User Register",
-                            "token": user.getToken()
                         })
                     }
                 })
@@ -102,7 +101,9 @@ const signin = (req, res) => {
                     "res": "User doesn't exist"
                 })
             } else {
+                console.log(user);
                 if (user.authenticate(req.body.password)){
+
                     res.status(200).json({
                         "res": "Successful authentication",
                         "token": user.getToken(),

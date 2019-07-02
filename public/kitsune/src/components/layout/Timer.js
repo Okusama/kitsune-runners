@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {connect} from "react-redux";
 import socketIOClient from "socket.io-client";
 
-import {startAdminTimer} from "../../utils/Api";
+import {url, startAdminTimer} from "../../utils/Api";
 import {runActionSetCurrentTime} from "../../redux/actions";
 
 class Timer extends Component {
@@ -21,8 +21,7 @@ class Timer extends Component {
 
     componentDidMount() {
 
-        const socket = socketIOClient("https://aqueous-taiga-46436.herokuapp.com");
-        //const socket = socketIOClient("http://localhost:8000");
+        const socket = socketIOClient(url);
 
         if (!this.props.user.isAdmin){
             socket.on("startPlayerTimer", () => {
