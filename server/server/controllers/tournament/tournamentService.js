@@ -2,7 +2,6 @@ const Tournament = require("../../schema/tournamentSchema");
 const sanitize = require("mongo-sanitize");
 const client = require("../../config/challonge");
 const userUtils = require("../../utils/userUtils");
-const utils = require("../../utils/generalUtils");
 
 const createTournament = (req, res) => {
     if (!req.body.token){

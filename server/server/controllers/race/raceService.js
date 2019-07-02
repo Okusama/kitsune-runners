@@ -1,7 +1,6 @@
 const Race = require("../../schema/raceSchema");
-const jwt = require("jwt-simple");
-const jwtConfig = require("../../config/jwt-config");
 const userUtils = require("../../utils/userUtils");
+const sanitize = require("mongo-sanitize");
 
 const create = (req, res) => {
     if(!req.body.token){
@@ -16,9 +15,11 @@ const create = (req, res) => {
                         "res": "Bad request Missing Info"
                     })
                 } else {
+                    let name = sanitize(req.body.name);
+                    let startAt = sanitize(req.body.start_at);
                     let race = {
-                        name: req.body.name,
-                        start_at: req.body.start_at,
+                        name: name,
+                        start_at: startAt,
                         state: "open"
                     };
                     let createRace = new Race(race);
@@ -56,49 +57,51 @@ const register = (req, res) => {
                         "res": "Bad Request Miss Race Id"
                     })
                 } else {
-                    let user = jwt.decode(req.body.token, jwtConfig.secret);
-                    Race.findOne({
-                        _id: req.body.race_id
-                    }, (err, race) => {
-                        if (err) {
-                            res.status(500).json({
-                                "res": "Internal Server Error"
-                            })
-                        } else if (!race) {
-                            res.status(404).json({
-                                "res": "Race not Found"
-                            })
-                        } else if (race.state === "close" || race.state === "finished"){
-                            res.status(423).json({
-                                "res": "This Race is closed or finished"
-                            })
-                        } else if (race.isRegister(user._id, race) !== undefined){
-                            res.status(400).json({
-                                "res": "You are already register for this race"
-                            })
-                        } else {
-                            let player = {
-                                id: user._id,
-                                pseudo: user.pseudo
-                            }
-                            race.updateOne({$push: { players: player}}).then( result => {
-                                if (result.nModified === 1){
-                                    Race.findOne({
-                                        id: req.body.race_id
-                                    }, (error, race) => {
-                                        res.status(200).json({
-                                            "res": "You are registered for the Race",
-                                            "race": race
-                                        })
-                                    });
-                                } else {
-                                    res.status(500).json({
-                                        "res": "An Error occurred during register"
-                                    })
+                    userUtils.getUserInfo(req.body.token).then(user => {
+                        let id = sanitize(req.body.race_id);
+                        Race.findOne({
+                            _id: id
+                        }, (err, race) => {
+                            if (err) {
+                                res.status(500).json({
+                                    "res": "Internal Server Error"
+                                })
+                            } else if (!race) {
+                                res.status(404).json({
+                                    "res": "Race not Found"
+                                })
+                            } else if (race.state === "close" || race.state === "finished"){
+                                res.status(423).json({
+                                    "res": "This Race is closed or finished"
+                                })
+                            } else if (race.isRegister(user._id, race) !== undefined){
+                                res.status(400).json({
+                                    "res": "You are already register for this race"
+                                })
+                            } else {
+                                let player = {
+                                    id: user._id,
+                                    pseudo: user.pseudo
                                 }
-                            });
+                                race.updateOne({$push: { players: player}}).then( result => {
+                                    if (result.nModified === 1){
+                                        Race.findOne({
+                                            _id: id
+                                        }, (error, race) => {
+                                            res.status(200).json({
+                                                "res": "You are registered for the Race",
+                                                "race": race
+                                            })
+                                        });
+                                    } else {
+                                        res.status(500).json({
+                                            "res": "An Error occurred during register"
+                                        })
+                                    }
+                                });
 
-                        }
+                            }
+                        });
                     });
                 }
             } else {
@@ -123,44 +126,46 @@ const unregister = (req, res) => {
                         "res": "Bad Request Miss Tournament Id"
                     })
                 } else {
-                    let user = jwt.decode(req.body.token, jwtConfig.secret);
-                    Race.findOne({
-                        _id: req.body.race_id
-                    }, (err, race) => {
-                        if (err) {
-                            res.status(500).json({
-                                "res": "Internal Server Error"
-                            })
-                        } else if (!race) {
-                            res.status(404).json({
-                                "res": "Race not Found"
-                            })
-                        } else if (race.state === "close" || race.state === "finished"){
-                            res.status(423).json({
-                                "res": "This race is closed or finished"
-                            })
-                        } else if (race.isRegister(user._id, race) === undefined){
-                            res.status(400).json({
-                                "res": "You are not register for this race"
-                            })
-                        } else {
-                            race.updateOne({$pull: { players: { id: user._id} }}).then( result => {
-                                if (result.nModified === 1){
-                                    Race.findOne({
-                                        _id: req.body.race_id
-                                    }, (err, race) => {
-                                        res.status(200).json({
-                                            "res": "You are Unregistered for the race",
-                                            "tournament": race
+                    userUtils.getUserInfo(req.body.token).then (user => {
+                        let id = sanitize(req.body.race_id);
+                        Race.findOne({
+                            _id: id
+                        }, (err, race) => {
+                            if (err) {
+                                res.status(500).json({
+                                    "res": "Internal Server Error"
+                                })
+                            } else if (!race) {
+                                res.status(404).json({
+                                    "res": "Race not Found"
+                                })
+                            } else if (race.state === "close" || race.state === "finished"){
+                                res.status(423).json({
+                                    "res": "This race is closed or finished"
+                                })
+                            } else if (race.isRegister(user._id, race) === undefined){
+                                res.status(400).json({
+                                    "res": "You are not register for this race"
+                                })
+                            } else {
+                                race.updateOne({$pull: { players: { id: user._id} }}).then( result => {
+                                    if (result.nModified === 1){
+                                        Race.findOne({
+                                            _id: id
+                                        }, (err, race) => {
+                                            res.status(200).json({
+                                                "res": "You are Unregistered for the race",
+                                                "race": race
+                                            })
                                         })
-                                    })
-                                } else {
-                                    res.status(500).json({
-                                        "res": "An Error occurred during unregistered of race"
-                                    })
-                                }
-                            });
-                        }
+                                    } else {
+                                        res.status(500).json({
+                                            "res": "An Error occurred during unregistered of race"
+                                        })
+                                    }
+                                });
+                            }
+                        });
                     });
                 }
             } else {
@@ -180,7 +185,7 @@ const getRaceByState = (req, res) => {
     } else {
         userUtils.getApiPermission(req.body.token).then( decoded => {
             if(decoded){
-                let stateFilter = req.body.state;
+                let stateFilter = sanitize(req.body.state);
                 Race.find({state: stateFilter}, (err, races) => {
                     if (err) {
                         res.status(500).json({
@@ -218,8 +223,9 @@ const setRaceResult = (req, res) => {
                         "res": "Bad Request Missing info"
                     })
                 } else {
+                    let id = sanitize(req.body.race_id);
                     Race.findOne({
-                        _id: req.body.race_id
+                        _id: id
                     }, (err, race) => {
                         if (err) {
                             res.status(500).json({

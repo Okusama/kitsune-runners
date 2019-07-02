@@ -153,7 +153,7 @@ const authenticated = (req, res) => {
                             "res": "Valid User",
                             "isLogin": true,
                             "isAdmin": isAdmin,
-                            "userId": user.id,
+                            "userId": user._id,
                             "avatar": user.avatar
                         })
                     });
