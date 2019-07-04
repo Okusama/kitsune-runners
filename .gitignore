@@ -7,3 +7,4 @@ public/kitsune/yarn.lock
 server/node_modules/
 server/server/config/
 server/yarn.lock
+public/kitsune/src/test/
