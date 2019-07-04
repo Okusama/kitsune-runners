@@ -1,0 +1,722 @@
+/************************************/
+/*               Font               */
+/************************************/
+@font-face {
+  font-family: Header_Font;
+  src: url("../font/Play-Regular.ttf");
+}
+@font-face {
+  font-family: Main_Font;
+  src: url("../font/PressStart2P-Regular.ttf");
+}
+/************************************/
+/*           General Class          */
+/************************************/
+.button-form {
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 15px;
+  min-width: 7vw;
+  text-align: center;
+  background-color: rgba(133, 37, 37, 0.75);
+  box-shadow: inset 3px 0px 10px 10px rgba(0, 0, 0, 0.75);
+}
+
+.active-button-form {
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 15px;
+  min-width: 7vw;
+  text-align: center;
+  background-color: black;
+  box-shadow: inset 3px 0px 10px 10px rgba(133, 37, 37, 0.75);
+}
+
+.hidden {
+  display: none;
+}
+
+/************************************/
+/*             General              */
+/************************************/
+* {
+  box-sizing: border-box;
+  color: white;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-family: "Header_Font";
+}
+
+input, select, textarea {
+  color: black;
+}
+
+/************************************/
+/*              Header              */
+/************************************/
+header {
+  height: 7vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: #7a0000;
+  box-shadow: inset 3px -3px 30px 15px rgba(0, 0, 0, 0.75);
+}
+header nav {
+  display: flex;
+  height: inherit;
+  width: inherit;
+  flex-direction: row;
+  align-items: center;
+}
+header nav > img {
+  width: 10%;
+}
+header nav ul {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+}
+header nav ul li a {
+  color: white;
+  font-family: "Header_Font";
+}
+
+.button-header {
+  font-size: 2rem;
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 200px 10px 200px 10px;
+  min-width: 7vw;
+  text-align: center;
+  background-color: rgba(133, 37, 37, 0.75);
+  box-shadow: inset 3px 0px 10px 10px rgba(0, 0, 0, 0.75);
+}
+
+.active-button-header {
+  font-size: 2rem;
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 200px 10px 200px 10px;
+  min-width: 7vw;
+  text-align: center;
+  background-color: black;
+  box-shadow: inset 3px 0px 10px 10px rgba(133, 37, 37, 0.75);
+}
+
+.nav-avatar {
+  width: 3vw;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+/************************************/
+/*              Main                */
+/************************************/
+main {
+  height: 93vh;
+  padding: 50px;
+  box-shadow: inset 3px 0px 60px 50px rgba(0, 0, 0, 0.75);
+  background-color: #852525;
+}
+
+/************************************/
+/*              HomePage            */
+/************************************/
+.homePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.homePage img {
+  margin-top: 5vh;
+  width: 25vw;
+}
+
+/************************************/
+/*         Signup & Signin           */
+/************************************/
+.signUp, .signIn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.signUp form, .signIn form {
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20vh;
+}
+.signUp form div, .signIn form div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.signUp form div label, .signIn form div label {
+  font-size: 2rem;
+  color: white;
+}
+.signUp form div input, .signIn form div input {
+  width: 50vw;
+  height: 40px;
+  border: 3px solid #AAACA9;
+  border-radius: 30px;
+  font-size: 2rem;
+  padding: 10px;
+  color: black;
+}
+.signUp form button, .signIn form button {
+  font-size: 1.5rem;
+}
+
+/************************************/
+/*         GeneralList           */
+/************************************/
+.itemList nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.itemList nav ul {
+  width: 25vw;
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.itemList ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+}
+.itemList ul li + li {
+  margin-top: 5px;
+}
+
+.itemThumb {
+  width: 75vw;
+  border: 2px solid black;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+}
+.itemThumb section:first-of-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.itemThumb section:first-of-type h3 {
+  font-size: 3rem;
+  background-color: black;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20px 0 20px 0;
+  border: 2px solid;
+  border-right-color: white;
+  border-bottom-color: white;
+  border-left: none;
+  border-top: none;
+}
+.itemThumb section:first-of-type p {
+  margin-right: 10px;
+}
+.itemThumb section:last-of-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.itemThumb section:last-of-type p {
+  margin-left: 10px;
+}
+.itemThumb a {
+  align-self: end;
+  font-size: 2.5rem;
+  background-color: black;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20px 0 20px 0;
+  border: 2px solid;
+  border-left-color: white;
+  border-top-color: white;
+  border-right: none;
+  border-bottom: none;
+}
+
+/************************************/
+/*         TournamentDetail         */
+/************************************/
+.tournamentDetail, .raceDetail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tournamentDetail div, .raceDetail div {
+  margin: 0 auto;
+  border: 1px solid black;
+  border-radius: 25px;
+  width: 75vw;
+  color: white;
+  font-size: 2rem;
+}
+.tournamentDetail div section:first-of-type, .raceDetail div section:first-of-type {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.tournamentDetail div section:first-of-type h3, .raceDetail div section:first-of-type h3 {
+  font-size: 3rem;
+  background-color: black;
+  width: max-content;
+  padding: 10px;
+  border-radius: 20px 0 20px 0;
+  border: 2px solid;
+  border-right-color: white;
+  border-bottom-color: white;
+  border-left: none;
+  border-top: none;
+}
+.tournamentDetail div section:first-of-type p, .raceDetail div section:first-of-type p {
+  margin-right: 10px;
+}
+.tournamentDetail div section:last-of-type, .raceDetail div section:last-of-type {
+  display: flex;
+  justify-content: center;
+}
+
+/************************************/
+/*        TournamentMatches         */
+/************************************/
+.tournamentMatches, .raceMatches {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tournamentMatches > div:first-of-type, .raceMatches > div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 50vw;
+  margin-bottom: 15px;
+}
+
+/************************************/
+/*            RaceMatches           */
+/************************************/
+.playerList {
+  width: 100vw;
+}
+.playerList ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+.playerList ul li {
+  width: 10vw;
+  font-size: 2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+/************************************/
+/*           RunManagement          */
+/************************************/
+.runManagement button {
+  color: white;
+  border: 1px solid white;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.runManagement .matchManagement {
+  display: flex;
+  flex-direction: row;
+}
+.runManagement .matchManagement > :last-child {
+  display: flex;
+  flex-direction: column;
+}
+.runManagement .matchManagement > :last-child button {
+  height: 50%;
+}
+
+/************************************/
+/*              Timer               */
+/************************************/
+.timer {
+  text-align: center;
+  width: 25vw;
+  background-color: black;
+  margin: 0 !important;
+}
+.timer h2 {
+  font-size: 10rem;
+  font-weight: bold;
+  color: greenyellow;
+}
+
+.timerManagement {
+  color: white;
+}
+
+/************************************/
+/*              Match               */
+/************************************/
+.match {
+  font-size: 2rem;
+  padding: 20px;
+  border: 3px solid black;
+  border-radius: 200px 10px 200px 10px;
+  width: 10vw;
+  text-align: center;
+  background-color: #B52424;
+  box-shadow: inset 3px 0px 10px 10px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+}
+.match div:first-of-type {
+  align-self: flex-end;
+}
+.match div:last-of-type {
+  align-self: flex-start;
+}
+.match div p:first-of-type {
+  font-family: Header_Font;
+}
+.match p {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.matchList {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+/************************************/
+/*        Championship Detail       */
+/************************************/
+.championshipDetail .championshipDetailHeader {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.championshipDetail .championshipDetailHeader div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.championshipDetail .playerScores {
+  margin-top: 25px;
+  border: 2px solid white;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: center;
+  font-size: 2rem;
+}
+.championshipDetail .playerScores th, .championshipDetail .playerScores td {
+  border: 1px solid white;
+  height: 25px;
+}
+
+.submitPlayerTime {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.submitPlayerTime form {
+  width: 25vw;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.submitPlayerTime form input, .submitPlayerTime form select {
+  height: 50px;
+  border: 3px solid #AAACA9;
+  border-radius: 30px;
+  font-size: 2rem;
+  padding: 10px;
+  margin: 10px;
+}
+
+/************************************/
+/*              Wheel               */
+/************************************/
+#wrapper {
+  margin: 40px auto 0;
+  width: 266px;
+  position: relative;
+}
+
+#txt {
+  color: #eaeaea;
+}
+
+/*WHEEL*/
+#wheel {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 8px solid #fff;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 10px, rgba(0, 0, 0, 0.05) 0px 3px 0px;
+  transform: rotate(0deg);
+}
+
+#wheel:before {
+  content: "";
+  position: absolute;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 242px;
+  height: 242px;
+  border-radius: 50%;
+  z-index: 1000;
+}
+
+#inner-wheel {
+  width: 100%;
+  height: 100%;
+  -webkit-transition: all 6s cubic-bezier(0, 0.99, 0.44, 0.99);
+  -moz-transition: all 6 cubic-bezier(0, 0.99, 0.44, 0.99);
+  -o-transition: all 6s cubic-bezier(0, 0.99, 0.44, 0.99);
+  -ms-transition: all 6s cubic-bezier(0, 0.99, 0.44, 0.99);
+  transition: all 6s cubic-bezier(0, 0.99, 0.44, 0.99);
+}
+
+#wheel div.sec {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 130px 75px 0;
+  border-color: #19c transparent;
+  transform-origin: 75px 129px;
+  left: 50px;
+  top: -4px;
+  opacity: 1;
+}
+
+#wheel div.sec:nth-child(1) {
+  transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+  -moz-transform: rotate(60deg);
+  -o-transform: rotate(60deg);
+  -ms-transform: rotate(60deg);
+  border-color: #16a085 transparent;
+}
+
+#wheel div.sec:nth-child(2) {
+  transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+  -moz-transform: rotate(120deg);
+  -o-transform: rotate(120deg);
+  -ms-transform: rotate(120deg);
+  border-color: #2980b9 transparent;
+}
+
+#wheel div.sec:nth-child(3) {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  border-color: #34495e transparent;
+}
+
+#wheel div.sec:nth-child(4) {
+  transform: rotate(240deg);
+  -webkit-transform: rotate(240deg);
+  -moz-transform: rotate(240deg);
+  -o-transform: rotate(240deg);
+  -ms-transform: rotate(240deg);
+  border-color: #f39c12 transparent;
+}
+
+#wheel div.sec:nth-child(5) {
+  transform: rotate(300deg);
+  -webkit-transform: rotate(300deg);
+  -moz-transform: rotate(300deg);
+  -o-transform: rotate(300deg);
+  -ms-transform: rotate(300deg);
+  border-color: #d35400 transparent;
+}
+
+#wheel div.sec:nth-child(6) {
+  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  border-color: #c0392b transparent;
+}
+
+#wheel div.sec .fa {
+  margin-top: -100px;
+  color: rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 10000000;
+  display: block;
+  text-align: center;
+  font-size: 36px;
+  margin-left: -15px;
+  text-shadow: rgba(255, 255, 255, 0.1) 0px -1px 0px, rgba(0, 0, 0, 0.2) 0px 1px 0px;
+}
+
+#spin {
+  width: 68px;
+  height: 68px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -34px 0 0 -34px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 0px;
+  z-index: 1000;
+  background: #fff;
+  cursor: pointer;
+  font-family: "Exo 2", sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#spin:after {
+  content: "SPIN";
+  text-align: center;
+  line-height: 68px;
+  color: #CCC;
+  text-shadow: 0 2px 0 #fff, 0 -2px 0 rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 100000;
+  width: 68px;
+  height: 68px;
+  display: block;
+}
+
+#spin:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 28px 20px;
+  border-color: transparent transparent #ffffff transparent;
+  top: -12px;
+  left: 14px;
+}
+
+#inner-spin {
+  width: 54px;
+  height: 54px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -27px 0 0 -27px;
+  border-radius: 50%;
+  background: red;
+  z-index: 999;
+  box-shadow: white 0px -2px 0px inset, white 0px 2px 0px inset, rgba(0, 0, 0, 0.4) 0px 0px 5px;
+  background: white;
+  /* Old browsers */
+  background: -moz-radial-gradient(center, ellipse cover, white 0%, #eaeaea 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, white), color-stop(100%, #eaeaea));
+  /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover, white 0%, #eaeaea 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover, white 0%, #eaeaea 100%);
+  /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover, white 0%, #eaeaea 100%);
+  /* IE10+ */
+  background: radial-gradient(ellipse at center, white 0%, #eaeaea 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#ffffff", endColorstr="#eaeaea",GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */
+}
+
+#spin:active #inner-spin {
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 5px inset;
+}
+
+#spin:active:after {
+  font-size: 15px;
+}
+
+#shine {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: -moz-radial-gradient(center, ellipse cover, white 0%, rgba(255, 255, 255, 0.99) 1%, rgba(255, 255, 255, 0.91) 9%, rgba(255, 255, 255, 0) 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, white), color-stop(1%, rgba(255, 255, 255, 0.99)), color-stop(9%, rgba(255, 255, 255, 0.91)), color-stop(100%, rgba(255, 255, 255, 0)));
+  /* Chrome,Safari4+ */
+  background: -webkit-radial-gradient(center, ellipse cover, white 0%, rgba(255, 255, 255, 0.99) 1%, rgba(255, 255, 255, 0.91) 9%, rgba(255, 255, 255, 0) 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-radial-gradient(center, ellipse cover, white 0%, rgba(255, 255, 255, 0.99) 1%, rgba(255, 255, 255, 0.91) 9%, rgba(255, 255, 255, 0) 100%);
+  /* Opera 12+ */
+  background: -ms-radial-gradient(center, ellipse cover, white 0%, rgba(255, 255, 255, 0.99) 1%, rgba(255, 255, 255, 0.91) 9%, rgba(255, 255, 255, 0) 100%);
+  /* IE10+ */
+  background: radial-gradient(ellipse at center, white 0%, rgba(255, 255, 255, 0.99) 1%, rgba(255, 255, 255, 0.91) 9%, rgba(255, 255, 255, 0) 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#ffffff", endColorstr="#00ffffff",GradientType=1 );
+  /* IE6-9 fallback on horizontal gradient */
+  opacity: 0.1;
+}
+
+/*ANIMATION*/
+@-webkit-keyframes hh {
+  0%, 100% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(7deg);
+    -webkit-transform: rotate(7deg);
+  }
+}
+@keyframes hh {
+  0%, 100% {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(7deg);
+    -webkit-transform: rotate(7deg);
+  }
+}
+.spin {
+  -webkit-animation: hh 0.1s;
+  /* Chrome, Safari, Opera */
+  animation: hh 0.1s;
+}
+
+/*# sourceMappingURL=main.css.map */

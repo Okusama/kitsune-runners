@@ -1,7 +1,9 @@
 
 \.idea/
 
+node_modules
 public/kitsune/build/
+public/kitsune/src/test
 public/kitsune/node_modules/
 public/kitsune/yarn.lock
 server/node_modules/
