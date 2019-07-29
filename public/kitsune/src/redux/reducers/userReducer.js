@@ -2,13 +2,11 @@ import {USER} from "../constants";
 import {cloneObject} from "../../utils/redux";
 
 const initalState = {
-    user: {
-        id: "",
-        avatar: "",
-        isLogin: false,
-        isAdmin: false,
-        token: "",
-    }
+    id: "",
+    avatar: "",
+    isLogin: false,
+    isAdmin: false,
+    token: ""
 };
 
 export default function userReducer(state = initalState, action){
@@ -19,39 +17,39 @@ export default function userReducer(state = initalState, action){
 
         case USER.ADMIN: {
 
-            let user = {
-                id: action.id,
-                avatar: action.avatar,
-                isLogin: true,
-                isAdmin: true,
-                token: TOKEN
-            };
+                let id = action.id;
+                let avatar = action.avatar;
+                let isLogin = true;
+                let isAdmin = true;
+                let token = TOKEN;
 
-            return cloneObject(state, {user});
+            return cloneObject(state, {id, avatar, isLogin, isAdmin, token});
 
         } case USER.LOGIN: {
 
-            let user = {
-                id: action.id,
-                avatar: action.avatar,
-                isLogin: true,
-                isAdmin: false,
-                token: TOKEN
-            };
+            let id = action.id;
+            let avatar = action.avatar;
+            let isLogin = true;
+            let isAdmin = false;
+            let token = TOKEN;
 
-            return cloneObject(state, {user});
+            return cloneObject(state, {id, avatar, isLogin, isAdmin, token});
 
         } case USER.LOGOUT: {
 
-            let user = {
-                id: "",
-                avatar: "",
-                isLogin: false,
-                isAdmin: false,
-                token: TOKEN
-            };
+            let id = "";
+            let avatar = "";
+            let isLogin = false;
+            let isAdmin = false;
+            let token = TOKEN;
 
-            return cloneObject(state, {user});
+            return cloneObject(state, {id, avatar, isLogin, isAdmin, token});
+
+        } case USER.UPDATE_AVATAR: {
+
+            let avatar = action.avatar;
+
+            return cloneObject(state, {avatar});
 
         } default: {
 

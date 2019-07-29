@@ -280,7 +280,8 @@ const registerTwitchLoginAndAvatar = (req, res) => {
                             })
                         } else {
                             res.status(200).json({
-                                "res": "Twitch Profile Register"
+                                "res": "Twitch Profile Register",
+                                "avatar": user.avatar
                             })
                         }
                     });

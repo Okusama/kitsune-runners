@@ -13,6 +13,10 @@ export function runActionUserAdmin(id, avatar){
     return {type: USER.ADMIN, id, avatar};
 }
 
+export function runActionUserUpdateAvatar(avatar) {
+    return {type: USER.UPDATE_AVATAR, avatar}
+}
+
 /*Matches Action*/
 export function runActionGetMatches(matches){
     return {type: RUN.TOURNAMENT.GET_MATCHES, matches};

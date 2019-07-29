@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {createRace, getRaceByState} from "../../utils/Api";
-import {Link} from "react-router-dom";
-import {List} from "../../components/layout/List";
+import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class AdminRacePage extends Component {
 
@@ -12,7 +11,7 @@ export default class AdminRacePage extends Component {
             start_at: "",
             token: localStorage.getItem("token"),
             state: "open",
-            data: []
+            raceList: []
         }
         this.getRace(this.state.state);
     }
@@ -49,18 +48,13 @@ export default class AdminRacePage extends Component {
             state: state
         };
         getRaceByState(sendData).then(json => {
-            console.log(json);
             return json.json();
-        }).then( res => {
-            let datas = res.res;
-            console.log(datas);
-            for(let data in datas){
-                let tournament = datas[data];
-                let newElement = {
-                    key: tournament._id,
-                    data: this.renderAdminRaceItemList(tournament, state)
-                };
-                this.setDataListState(newElement);
+        }).then( data => {
+
+            if (typeof data.res !== "string"){
+                this.setState({ raceList: data.res});
+            } else {
+                console.log(data.res);
             }
 
         }).catch(err => {
@@ -75,45 +69,23 @@ export default class AdminRacePage extends Component {
         }));
     }
 
-    renderAdminRaceItemList = (data, state) => {
-        let combo;
-        switch (state){
-            case "open":
-                this.setState({
-                    state_combo: "close"
-                });
-                combo = <select name="state_combo" onChange={this.handleChange}>
-                    <option value="close">Close</option>
-                    <option value="finished">Finished</option>
-                </select>;
-                break;
-            case "close":
-                this.setState({
-                    state_combo: "finished"
-                });
-                combo = <select name="state_combo" onChange={this.handleChange}>
-                    <option value="finished">Finished</option>
-                </select>;
-                break;
-            default:
-                break;
-        }
-
-        return(
-            <div key={data._id}>
-                <h3>{data.name}</h3>
-                <p>{data.start_at}</p>
-                <p>{data.players.length}</p>
-                <Link to={{pathname : "/admin/run/management", state: {item: data, item_type: "race"}}}>Management</Link>
-                <form>
-                    {combo}
-                    { state !== "finished" ? <button type="button" data-id={data._id} onClick={this.handleSubmitChangeTournamentState}>Send</button> : false}
-                </form>
-            </div>
-        );
-    }
 
     render(){
+
+        let raceList = this.state.raceList.map((race, index) =>
+            <ItemThumb
+                key={index}
+                name={race.name}
+                startAt={race.start_at}
+                nbPlayers={race.players.length}
+                item={race}
+                itemType={"race"}
+                isAdmin={true}
+            />
+        );
+
+        let status = this.state.state;
+
         return(
             <div>
                 <div>
@@ -131,11 +103,11 @@ export default class AdminRacePage extends Component {
                     </form>
                 </div>
                 <div>
-                    <button data-value="open" onClick={this.handleDetailClick}>Open</button>
-                    <button data-value="close" onClick={this.handleDetailClick}>Close</button>
-                    <button data-value="finished" onClick={this.handleDetailClick}>Finished</button>
+                    <button className={status === "open" ? "active-button-form" : "button-form"} data-value="open" onClick={this.handleDetailClick}>Open</button>
+                    <button className={status === "close" ? "active-button-form" : "button-form"} data-value="close" onClick={this.handleDetailClick}>Close</button>
+                    <button className={status === "close" ? "active-button-form" : "button-form"} data-value="finished" onClick={this.handleDetailClick}>Finished</button>
                     <h2>{this.state.state} Race</h2>
-                    <List data={this.state.data}/>
+                    {raceList}
                 </div>
             </div>
         );

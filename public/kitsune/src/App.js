@@ -107,7 +107,7 @@ class App extends Component {
 
 /*Wrap Redux withRouter for Route Component shouldComponentUpdate */
 const NewAppWithRedux = withRouter(connect( state => ({
-        user: state.user.user
+        user: state.user
     }),{
         runActionUserAdmin,
         runActionUserLogin

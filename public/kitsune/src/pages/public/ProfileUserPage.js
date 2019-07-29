@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {registerTwitchLoginAndAvatar} from "../../utils/Api";
 import {connect} from "react-redux";
+import {runActionUserUpdateAvatar} from "../../redux/actions";
 
 class ProfileUserPage extends Component {
 
@@ -39,6 +40,10 @@ class ProfileUserPage extends Component {
                 return res.json();
             }).then(data => {
                 console.log(data);
+                if (data.hasOwnProperty("avatar")) {
+                    this.props.runActionUserUpdateAvatar(data.avatar);
+                }
+
             })
 
         })
@@ -68,8 +73,10 @@ class ProfileUserPage extends Component {
 }
 
 const NewProfileUserPageWithRedux = connect(state => ({
-        user: state.user.user
-    }),null
+        user: state.user
+    }),{
+        runActionUserUpdateAvatar
+    }
 )(ProfileUserPage);
 
 export default NewProfileUserPageWithRedux;

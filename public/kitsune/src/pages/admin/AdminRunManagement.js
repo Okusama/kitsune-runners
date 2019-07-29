@@ -236,7 +236,6 @@ class AdminRunManagement extends Component {
     getRacePlayerList = () => {
 
         return this.state.item.players.map( player => {
-            console.log(player);
            return(
              <option value={player.twitch_login}>{player.pseudo}</option>
            );

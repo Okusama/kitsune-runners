@@ -5,6 +5,28 @@ import moment from "moment";
 export default class ItemThumb extends Component {
 
     render(){
+
+        let button = null;
+        if (this.props.isAdmin) {
+
+            switch (this.props.itemType) {
+
+                case "tournament" : {
+                    button = <Link to={{pathname: `/admin/tournament/management`, state: {item: this.props.item}}}>Management</Link>
+                    break;
+                } case "race" : {
+                    button = <Link to={{pathname: `/admin/run/management`, state: {item: this.props.item, item_type: "race"}}}>Management</Link>
+                    break;
+                } default : {
+                    break;
+                }
+
+            }
+
+        } else {
+            button = <Link to={{pathname: `/public/${this.props.itemType}/detail`, state: {item: this.props.item}}}>Detail</Link>
+        }
+
         return(
             <li className="itemThumb">
                 <section>
@@ -16,12 +38,7 @@ export default class ItemThumb extends Component {
                 </section>
                 <section>
                     <p>Player: {this.props.nbPlayers}</p>
-                    {this.props.isAdmin ?
-                        <Link to={{pathname: `/admin/${this.props.itemType}/management`, state: {item: this.props.item}}}>Management</Link>
-                    :
-                        <Link to={{pathname: `/public/${this.props.itemType}/detail`, state: {item: this.props.item}}}>Detail</Link>
-                    }
-
+                    {button}
                 </section>
             </li>
         );
