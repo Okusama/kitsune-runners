@@ -540,6 +540,8 @@ main {
 
 .timerManagement {
   color: white;
+  display: flex;
+  flex-direction: row;
 }
 
 /************************************/
@@ -661,6 +663,38 @@ main {
       margin: 10px;
 
     }
+
+  }
+
+}
+
+/************************************/
+/*              Admin               */
+/************************************/
+
+.adminTournament {
+
+  > div:first-of-type {
+
+    width: 100%;
+    height: 8vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+
+  }
+
+}
+
+.adminTournamentManagement {
+
+  section {
+
+    display: flex;
+    flex-direction: row;
+    overflow: paged-y;
+    align-items: center;
 
   }
 

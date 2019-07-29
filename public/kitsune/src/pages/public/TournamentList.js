@@ -59,6 +59,7 @@ export default class TournamentList extends Component {
                 nbPlayers={tournament.players.length}
                 item={tournament}
                 itemType={"tournament"}
+                isAdmin={false}
             />
         );
 

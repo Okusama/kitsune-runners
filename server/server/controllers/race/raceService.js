@@ -81,7 +81,8 @@ const register = (req, res) => {
                             } else {
                                 let player = {
                                     id: user._id,
-                                    pseudo: user.pseudo
+                                    pseudo: user.pseudo,
+                                    twitch_login: user.twitch_login
                                 }
                                 race.updateOne({$push: { players: player}}).then( result => {
                                     if (result.nModified === 1){
