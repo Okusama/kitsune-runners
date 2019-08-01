@@ -105,6 +105,7 @@ class TournamentDetail extends Component {
     render(){
 
         let bracket = null;
+        let tournamentDetail = this.constructTournamentDetail(this.state.tournament);
 
         if (this.state.tournament.hasOwnProperty("bracket_url")) {
             bracket = this.renderBracket(this.state.tournament.bracket_url)
@@ -112,7 +113,7 @@ class TournamentDetail extends Component {
 
         return(
             <div className="tournamentDetail">
-                {this.constructTournamentDetail(this.state.tournament)}
+                {tournamentDetail}
                 {bracket}
             </div>
         );
@@ -121,7 +122,7 @@ class TournamentDetail extends Component {
 }
 
 const NewTournamentDetailWithRedux = connect(state => ({
-        user: state.user.user
+        user: state.user
     }),null
 )(TournamentDetail);
 

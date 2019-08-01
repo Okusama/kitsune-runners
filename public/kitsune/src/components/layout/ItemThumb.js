@@ -12,10 +12,10 @@ export default class ItemThumb extends Component {
             switch (this.props.itemType) {
 
                 case "tournament" : {
-                    button = <Link to={{pathname: `/admin/tournament/management`, state: {item: this.props.item}}}>Management</Link>
+                    button = <Link to={{pathname: `/admin/tournament/management`, state: {item: this.props.item}}}>Management</Link>;
                     break;
                 } case "race" : {
-                    button = <Link to={{pathname: `/admin/run/management`, state: {item: this.props.item, item_type: "race"}}}>Management</Link>
+                    button = <Link to={{pathname: `/admin/run/management`, state: {item: this.props.item, item_type: "race"}}}>Management</Link>;
                     break;
                 } default : {
                     break;

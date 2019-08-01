@@ -106,7 +106,7 @@ class RaceDetail extends Component{
 }
 
 const NewRaceDetailWithRedux = connect(state => ({
-        user: state.user.user
+        user: state.user
     }),null
 )(RaceDetail);
 
