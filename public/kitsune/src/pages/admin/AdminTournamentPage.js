@@ -1,7 +1,5 @@
 import React, {Component} from "react";
 import {changeTournamentState, createTournament, getTournamentByState} from "../../utils/Api";
-import {List} from "../../components/layout/List";
-import {Link} from "react-router-dom";
 import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class AdminTournamentPage extends Component {

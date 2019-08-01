@@ -81,9 +81,9 @@ class TournamentDetail extends Component {
                 <section>
                     {
                         hasRegister.length === 0 ? (
-                            <a className="button-form" href="#" onClick={this.onRegister}>Register</a>
+                            <button className="button-form" onClick={this.onRegister}>Register</button>
                         ) : (
-                            <a className="button-form" href="#" onClick={this.onUnregister}>Unregister</a>
+                            <button className="button-form" onClick={this.onUnregister}>Unregister</button>
                         )
                     }
                     <Link className="button-form" to={{pathname: "/public/tournament/matches", state: {id: tournament._id}}}>Matches</Link>

@@ -2,6 +2,7 @@ import React, { Component } from  "react";
 import {signin} from "../../utils/Api";
 import {connect} from "react-redux";
 import {runActionUserAdmin, runActionUserLogin} from "../../redux/actions";
+import {Redirect} from "react-router-dom";
 
 class Signin extends Component {
 
@@ -9,7 +10,8 @@ class Signin extends Component {
         super(props);
         this.state = {
             email: "",
-            password: ""
+            password: "",
+            redirect: false
         };
     }
 
@@ -49,6 +51,11 @@ class Signin extends Component {
                 } else {
                     this.props.runActionUserLogin(res.userId, res.avatar);
                 }
+
+                this.setState({
+                    redirect: true
+                });
+
             }
         }).catch(err => {
             console.log(err);
@@ -57,6 +64,13 @@ class Signin extends Component {
     }
 
     render(){
+
+        let redirect = this.state.redirect;
+
+        if (redirect) {
+            return(<Redirect to="/"/>);
+        }
+
         return (
             <div className="signIn">
                 <h1>Sign In</h1>
