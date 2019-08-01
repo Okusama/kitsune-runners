@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {changeTournamentState, createTournament, getTournamentByState} from "../../utils/Api";
-import {List} from "../../components/layout/List";
-import {Link} from "react-router-dom";
+import ItemThumb from "../../components/layout/ItemThumb";
 
 export default class AdminTournamentPage extends Component {
 
@@ -12,7 +11,7 @@ export default class AdminTournamentPage extends Component {
             start_at: "",
             token: localStorage.getItem("token"),
             state: "open",
-            data: [],
+            tournamentList: [],
             state_combo: "",
             tournament_id: ""
         };
@@ -69,27 +68,18 @@ export default class AdminTournamentPage extends Component {
         };
         getTournamentByState(sendData).then(json => {
             return json.json();
-        }).then( res => {
-            let datas = res.res;
-            for(let data in datas){
-                let tournament = datas[data];
-                let newElement = {
-                    key: tournament._id,
-                    data: this.constructAdminTournamentItemList(tournament, state)
-                };
-                this.setDataListState(newElement);
+        }).then( data => {
+
+            if (typeof data.res !== "string"){
+                this.setState({ tournamentList: data.res});
+            } else {
+                console.log(data.res);
             }
 
         }).catch(err => {
             console.log(err);
         });
 
-    }
-
-    setDataListState = (newElement) => {
-        this.setState( prevState => ({
-            data: [...prevState.data, newElement]
-        }));
     }
 
     handleDetailClick = event => {
@@ -103,47 +93,24 @@ export default class AdminTournamentPage extends Component {
 
     }
 
-    constructAdminTournamentItemList = (data, state) => {
-        let combo;
-        switch (state){
-            case "open":
-                this.setState({
-                    state_combo: "close"
-                });
-                combo = <select name="state_combo" onChange={this.handleChange}>
-                            <option value="close">Close</option>
-                            <option value="finished">Finished</option>
-                        </select>;
-                break;
-            case "close":
-                this.setState({
-                    state_combo: "finished"
-                });
-                combo = <select name="state_combo" onChange={this.handleChange}>
-                            <option value="finished">Finished</option>
-                        </select>;
-                break;
-            default:
-                break;
-        }
-        
-        return(
-            <div key={data._id}>
-                <h3>{data.name}</h3>
-                <p>{data.start_at}</p>
-                <p>{data.players.length}</p>
-                <Link to={{pathname : "/admin/tournament/management", state: {data: data}}}>Management</Link>
-                <form>
-                    {combo}
-                    { state !== "finished" ? <button type="button" data-id={data._id} onClick={this.handleSubmitChangeTournamentState}>Send</button> : false}
-                </form>
-            </div>
-        );
-    }
-
     render(){
+
+        let tournamentList = this.state.tournamentList.map((tournament, index) =>
+            <ItemThumb
+                key={index}
+                name={tournament.name}
+                startAt={tournament.start_at}
+                nbPlayers={tournament.players.length}
+                item={tournament}
+                itemType={"tournament"}
+                isAdmin={true}
+            />
+        );
+
+        let status = this.state.state;
+
         return(
-            <div>
+            <div className="adminTournament">
                 <div>
                     <h2>Create Tournament</h2>
                     <form>
@@ -159,11 +126,11 @@ export default class AdminTournamentPage extends Component {
                     </form>
                 </div>
                 <div>
-                    <button data-value="open" onClick={this.handleDetailClick}>Open</button>
-                    <button data-value="close" onClick={this.handleDetailClick}>Close</button>
-                    <button data-value="finished" onClick={this.handleDetailClick}>Finished</button>
+                    <button className={status === "open" ? "active-button-form" : "button-form"} data-value="open" onClick={this.handleDetailClick}>Open</button>
+                    <button className={status === "close" ? "active-button-form" : "button-form"} data-value="close" onClick={this.handleDetailClick}>Close</button>
+                    <button className={status === "finished" ? "active-button-form" : "button-form"} data-value="finished" onClick={this.handleDetailClick}>Finished</button>
                     <h2>{this.state.state} tournament</h2>
-                    <List data={this.state.data}/>
+                    {tournamentList}
                 </div>
             </div>
         );

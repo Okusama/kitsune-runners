@@ -56,6 +56,7 @@ export default class RaceList extends Component {
                 nbPlayers={race.players.length}
                 item={race}
                 itemType={"race"}
+                isAdmin={false}
             />
         );
 

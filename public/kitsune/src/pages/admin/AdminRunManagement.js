@@ -69,7 +69,6 @@ class AdminRunManagement extends Component {
             } case "race" : {
 
                 let racePlayers = this.state.item.players.map(player => {
-                    console.log(player);
                     return {
                         id: player.id,
                         pseudo: player.pseudo,
@@ -115,6 +114,19 @@ class AdminRunManagement extends Component {
             return json.json();
         }).then(data => {
            console.log(data);
+        });
+
+    }
+
+    getTournamentPlayerList = () => {
+
+        return this.props.matchSelected.map( match => {
+            return(
+                <React.Fragment>
+                    <option value={match.player1.twitch_login}>{match.player1.pseudo}</option>
+                    <option value={match.player2.twitch_login}>{match.player2.pseudo}</option>
+                </React.Fragment>
+            )
         });
 
     }
@@ -221,6 +233,16 @@ class AdminRunManagement extends Component {
 
     }
 
+    getRacePlayerList = () => {
+
+        return this.state.item.players.map( player => {
+           return(
+             <option value={player.twitch_login}>{player.pseudo}</option>
+           );
+        });
+
+    }
+
     renderForRace = () => {
 
         return(
@@ -246,17 +268,20 @@ class AdminRunManagement extends Component {
     render(){
 
         let renderItem = null;
+        let playerList = null;
 
         switch (this.state.item_type) {
 
             case "tournament" : {
 
                 renderItem = this.renderForTournament();
+                playerList = this.getTournamentPlayerList();
                 break;
 
             } case "race" : {
 
                 renderItem = this.renderForRace();
+                playerList = this.getRacePlayerList();
                 break;
 
             } default : {
@@ -270,9 +295,9 @@ class AdminRunManagement extends Component {
                 <h2>Run Management</h2>
                 <div className="timerManagement">
                     <Timer isControl={true}/>
+                    <AdminStreamManagement playerList={playerList}/>
                 </div>
                 {renderItem}
-                <AdminStreamManagement/>
             </div>
         );
     }

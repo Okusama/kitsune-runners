@@ -13,7 +13,7 @@ class AdminTournamentManagement extends Component {
     constructor(props){
         super(props);
         this.state = {
-            tournament: this.props.location.state.data,
+            tournament: this.props.location.state.item,
             token: localStorage.getItem("token"),
             bracket: null,
         };
@@ -37,7 +37,7 @@ class AdminTournamentManagement extends Component {
         let sendData = {
             token: this.state.token,
             tournament_id: this.state.tournament._id
-        }
+        };
 
         startTournament(sendData).then(json => {
             return json.json();
@@ -52,7 +52,7 @@ class AdminTournamentManagement extends Component {
         let sendData = {
             token: this.state.token,
             tournament_id: this.state.tournament._id
-        }
+        };
 
         getOpenMatches(sendData).then(json => {
             return json.json();
@@ -78,6 +78,8 @@ class AdminTournamentManagement extends Component {
 
     render(){
 
+        console.log(this.state.tournament);
+
         let matches = this.props.matchList.map( match =>
             <Match
                 key={match.match_id}
@@ -91,13 +93,15 @@ class AdminTournamentManagement extends Component {
         let bracket = this.state.bracket;
 
         return(
-            <div>
+            <div className="adminTournamentManagement">
                 <h4>Tournament Management</h4>
                 <p>{this.state.tournament.name}</p>
-                <button type="button" onClick={this.onStartTournament}>Start Tournament</button>
-                <Link to={{pathname : "/admin/run/management", state: {item: this.state.tournament, item_type: "tournament"}}}>Manage Race</Link>
+                <button className="button-form" type="button" onClick={this.onStartTournament}>Start Tournament</button>
                 {bracket}
-                {matches}
+                <section>
+                    <Link className="button-form" to={{pathname : "/admin/run/management", state: {item: this.state.tournament, item_type: "tournament"}}}>Manage Race</Link>
+                    {matches}
+                </section>
             </div>
         );
 

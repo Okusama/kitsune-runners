@@ -16,7 +16,6 @@ const signup = (req, res) => {
         res.status(400).json({
             "res": "Bad Request"
         })
-
     } else {
         //Init User
         let email = sanitize(req.body.email);
@@ -280,7 +279,8 @@ const registerTwitchLoginAndAvatar = (req, res) => {
                             })
                         } else {
                             res.status(200).json({
-                                "res": "Twitch Profile Register"
+                                "res": "Twitch Profile Register",
+                                "avatar": user.avatar
                             })
                         }
                     });

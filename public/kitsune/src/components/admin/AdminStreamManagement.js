@@ -11,7 +11,7 @@ class AdminStreamManagement extends Component {
             player2: "default",
             player3: "default",
             player4: "default"
-        }
+        };
 
         this.streamWindows = {
             player1: null,
@@ -56,19 +56,12 @@ class AdminStreamManagement extends Component {
 
     render(){
 
-        let players = this.props.matchSelected.map( match => {
-            return(
-                <React.Fragment>
-                    <option value={match.player1.twitch_login}>{match.player1.pseudo}</option>
-                    <option value={match.player2.twitch_login}>{match.player2.pseudo}</option>
-                </React.Fragment>
-            )
-        });
+        let players = this.props.playerList;
 
         return(
             <div>
-                <button onClick={this.openStream}>Show</button>
-                <button onClick={this.closeStream}>Close</button>
+                <button className="button-form" onClick={this.openStream}>Show</button>
+                <button className="button-form" onClick={this.closeStream}>Close</button>
                 <select name="player1" value={this.state.player1} onChange={this.handleChange}>
                     <option value="default">None</option>
                     {players}

@@ -81,9 +81,9 @@ class TournamentDetail extends Component {
                 <section>
                     {
                         hasRegister.length === 0 ? (
-                            <a className="button-form" href="#" onClick={this.onRegister}>Register</a>
+                            <button className="button-form" onClick={this.onRegister}>Register</button>
                         ) : (
-                            <a className="button-form" href="#" onClick={this.onUnregister}>Unregister</a>
+                            <button className="button-form" onClick={this.onUnregister}>Unregister</button>
                         )
                     }
                     <Link className="button-form" to={{pathname: "/public/tournament/matches", state: {id: tournament._id}}}>Matches</Link>
@@ -105,6 +105,7 @@ class TournamentDetail extends Component {
     render(){
 
         let bracket = null;
+        let tournamentDetail = this.constructTournamentDetail(this.state.tournament);
 
         if (this.state.tournament.hasOwnProperty("bracket_url")) {
             bracket = this.renderBracket(this.state.tournament.bracket_url)
@@ -112,7 +113,7 @@ class TournamentDetail extends Component {
 
         return(
             <div className="tournamentDetail">
-                {this.constructTournamentDetail(this.state.tournament)}
+                {tournamentDetail}
                 {bracket}
             </div>
         );
@@ -121,7 +122,7 @@ class TournamentDetail extends Component {
 }
 
 const NewTournamentDetailWithRedux = connect(state => ({
-        user: state.user.user
+        user: state.user
     }),null
 )(TournamentDetail);
 

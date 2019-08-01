@@ -100,7 +100,7 @@ class Header extends Component {
  * Wrap with Redux
  */
 const NewHeaderWithRedux = withRouter(connect( state => ({
-        user: state.user.user
+        user: state.user
     }),{
         runActionUserLogout
     }

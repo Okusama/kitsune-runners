@@ -1,5 +1,6 @@
 import React, { Component } from  "react";
 import { signup } from "../../utils/Api";
+import {Redirect} from "react-router-dom";
 
 export default class Signup extends Component {
 
@@ -9,7 +10,8 @@ export default class Signup extends Component {
             email: "",
             password: "",
             cpassword: "",
-            pseudo: ""
+            pseudo: "",
+            redirect: false
         };
     }
 
@@ -41,6 +43,9 @@ export default class Signup extends Component {
         signup(sendData).then(res => {
            return res.json();
         }).then(res => {
+            this.setState({
+                redirect: true
+            });
             console.log(res);
         }).catch(err => {
             console.log(err);
@@ -48,6 +53,13 @@ export default class Signup extends Component {
     }
 
     render(){
+
+        let redirect = this.state.redirect;
+
+        if (redirect) {
+            return(<Redirect to="/"/>);
+        }
+
         return(
             <div className="signUp">
                 <h2>Sign Up</h2>

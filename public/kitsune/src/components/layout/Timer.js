@@ -153,7 +153,7 @@ class Timer extends Component {
 }
 
 const NewTimerWithRedux = connect(state => ({
-        user: state.user.user
+        user: state.user
     }),{
         runActionSetCurrentTime
     }
